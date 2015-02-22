@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object }}{% endblock %}
+
+{% block content %}
+	<h1>{{ object.title }}</h1>
+
+	<h2>Spirits</h2>
+
+	<ul>
+		{% for ingredient in object.ingredient_set.all %}
+			<li>{{ ingredient }} <a href="{% url "ingredient_delete" object.slug ingredient.id %}">x</a></li>
+	    {% endfor %}
+	</ul>
+
+	<h2>Mixers</h2>
+
+	<ul>
+		{% for ingredient in object.mixeringredient_set.all %}
+			<li>{{ ingredient }} <a href="{% url "mixeringredient_delete" object.slug ingredient.id %}">x</a></li>
+	    {% endfor %}
+	</ul>
+
+	<h2>Description</h2>
+	<p>{{ object.description|default:"No description" }}</p>
+
+	<p><a href="{% url "cocktail_update" object.slug %}">Edit description</a></p>
+
+	<p><a href="{% url "ingredient_create" object.slug %}">Add Spirit</a></p>
+
+	<p><a href="{% url "mixeringredient_create" object.slug %}">Add Mixer</a></p>
+
+	<p><a href="{% url "cocktail_list" %}">Back to cocktail list</a></p>
+{% endblock %}
+	
