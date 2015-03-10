@@ -29,6 +29,15 @@ class MixerCreateView(CreateView):
 class CocktailListView(ListView):
 	model = Cocktail
 
+	def get_queryset(self):
+		queryset = super(CocktailListView, self).get_queryset()
+
+		q = self.request.GET.get("q")
+		if q:
+			return queryset.filter(title__icontains=q)
+		return queryset
+
+
 class CocktailDetailView(DetailView):
 	model = Cocktail
 
@@ -72,17 +81,21 @@ class MixerIngredientCreateView(CreateView):
 		return reverse('cocktail_detail', kwargs={'slug': self.kwargs['slug']})
 
 
-class IngredientDeleteView(DeleteView):
+class DeleteMixin(object):
+	"""Adds successful url functionality to DeleteViews"""
+	
+	def get_success_url(self):
+		return reverse('cocktail_detail', args=[self.kwargs['slug']])
+		
+
+
+class IngredientDeleteView(DeleteMixin, DeleteView):
 	model = Ingredient
 
-	def get_success_url(self):
-		return reverse('cocktail_detail', args=[self.kwargs['slug']])
 
-
-class MixerIngredientDeleteView(DeleteView):
+class MixerIngredientDeleteView(DeleteMixin, DeleteView):
 	model = MixerIngredient
+	template_name="cocktails/ingredient_confirm_delete.html"
 
-	def get_success_url(self):
-		return reverse('cocktail_detail', args=[self.kwargs['slug']])
 
 

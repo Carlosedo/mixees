@@ -19,5 +19,5 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)/add_ingredient/$', IngredientCreateView.as_view(), name='ingredient_create'),
     url(r'^(?P<slug>[-\w]+)/add_mixeringredient/$', MixerIngredientCreateView.as_view(), name='mixeringredient_create'),
     url(r'^(?P<slug>[-\w]+)/remove_ingredient/(?P<pk>\d+)/$', IngredientDeleteView.as_view(), name='ingredient_delete'),
-    url(r'^(?P<slug>[-\w]+)/remove_mixeringredient/(?P<pk>\d+)/$', MixerIngredientDeleteView.as_view(template_name="cocktails/ingredient_confirm_delete.html"), name='mixeringredient_delete'),
+    url(r'^(?P<slug>[-\w]+)/remove_mixeringredient/(?P<pk>\d+)/$', MixerIngredientDeleteView.as_view(), name='mixeringredient_delete'),
 )

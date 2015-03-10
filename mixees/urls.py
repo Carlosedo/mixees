@@ -9,5 +9,4 @@ urlpatterns = patterns('',
     url(r'^$', 'home.views.index'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cocktails/', include('cocktails.urls')),
-
 )
