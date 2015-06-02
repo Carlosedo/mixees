@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Mixer{% endblock %}
+
+{% block content %}
+<h1>Add Mixer</h1>
+
+<form method="POST">{% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-prymary" type="submit">Save</button>
+</form>
+<a href="{% url "ingredient_list" %}">Back to ingredient list</a>
+{% endblock %}

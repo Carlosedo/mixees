@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Cocktails{% endblock %}
+
+
+
+{% block content %}
+	<h1>Cocktails</h1>
+
+	{% include "cocktails/_cocktail_search.html" %}
+
+	<ul>
+		{% for object in cocktail_list %}
+			<li><a href="{% url 'cocktail_detail' object.slug %}">{{ object }}</a></li>
+		{% endfor %}
+	</ul>
+
+	<a href="{% url 'cocktail_create' %}" class="btn btn-primary">Add new</a>
+
+{% endblock %}
