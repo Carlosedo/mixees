@@ -37,8 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'cocktails',
-    'home',
+    'apps.cocktails',
+    'apps.home',
     'crispy_forms',
 )
 

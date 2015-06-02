@@ -6,7 +6,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'mixees.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     
-    url(r'^$', 'home.views.index'),
+    url(r'^$', 'apps.home.views.index'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^cocktails/', include('cocktails.urls')),
+    url(r'^cocktails/', include('apps.cocktails.urls')),
 )
