@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Spirit{% endblock %}
+
+{% block content %}
+	
+	<h1>Already added Spirits</h1>
+
+	<ul>
+		{% if form.instance.cocktail.ingredient_set.all %}
+			{% for ingredient in form.instance.cocktail.ingredient_set.all %}
+				<li>{{ ingredient }}</li>
+		    {% endfor %}
+		{% else %}
+			<p>None</p>
+		{% endif %}
+	</ul>
+
+	<h1>Add Spirit</h1>
+
+	<form method="post">
+	    {% csrf_token %}
+	    {{ form|crispy }}
+	    <button type="submit" class="btn btn-primary" name="save">Save</button>
+	    <button type="submit" class="btn btn-primary" name="_addspirit">Save and add a spirit</button>
+	    <button type="submit" class="btn btn-primary" name="_addmixer">Save and add a mixer</button>
+	</form>
+	</br>
+	<p><a href="{% url 'cocktail_detail' form.instance.cocktail.slug %}">Back to Cocktail</a></p>
+{% endblock %}

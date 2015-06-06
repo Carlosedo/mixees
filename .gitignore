@@ -4,3 +4,8 @@
 # osx
 .DS_Store
 
+# text files
+.txt
+
+# db
+db.sqlite3

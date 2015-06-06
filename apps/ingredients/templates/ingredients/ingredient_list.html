@@ -7,13 +7,13 @@
 	<h2>Spirits</h2>
 	<ul>
 		{% for object in spirit_list %}
-			<li><a href="{% url "spirit_detail" object.slug %}">{{ object }}</a></li>
+			<li><a href="{% url 'spirit_detail' object.slug %}">{{ object }}</a></li>
 		{% endfor %}
 	</ul>
 	<h2>Mixers</h2>
 	<ul>
 		{% for object in mixers %}
-			<li><a href="{% url "mixer_detail" object.slug %}">{{ object }}</a></li>
+			<li><a href="{% url 'mixer_detail' object.slug %}">{{ object }}</a></li>
 		{% endfor %}
 	</ul>
 	<a href="{% url "spirit_create" %}">Add Spirit</a>
