@@ -8,17 +8,17 @@
 	<h2>Spirits</h2>
 
 	<ul>
-		{% for ingredient in object.ingredient_set.all %}
-			<li>{{ ingredient }} of <a href="{% url 'spirit_detail' ingredient.spirits.slug %}">{{ ingredient.spirits }}</a>. <a href="{% url 'ingredient_delete' object.slug ingredient.id %}">x</a></li>
+		{% for ingredient in spirits %}
+			<li>{{ ingredient }} of <a href="{% url 'spirit_detail' ingredient.liquid.slug %}">{{ ingredient.liquid }}</a>. <a href="{% url 'ingredient_delete' object.slug ingredient.id %}">x</a></li>
 	    {% endfor %}
 	</ul>
 
 	<h2>Mixers</h2>
 
 	<ul>
-		{% for ingredient in object.mixeringredient_set.all %}
+		{# {% for ingredient in object.mixeringredient_set.all %}
 			<li>{{ ingredient }} of <a href="{% url 'mixer_detail' ingredient.mixers.slug %}">{{ ingredient.mixers }}</a>. <a href="{% url 'mixeringredient_delete' object.slug ingredient.id %}">x</a></li>
-	    {% endfor %}
+	    {% endfor %} #}
 	</ul>
 
 	<h2>Description</h2>
@@ -26,9 +26,9 @@
 
 	<p><a href="{% url 'cocktail_update' object.slug %}">Edit description</a></p>
 
-	<p><a href="{% url 'ingredient_create' object.slug %}">Add Spirit</a></p>
+	<p><a href="{% url 'ingredient_create' object.slug %}">Add Ingredient</a></p>
 
-	<p><a href="{% url 'mixeringredient_create' object.slug %}">Add Mixer</a></p>
+	{# <p><a href="{% url 'mixeringredient_create' object.slug %}">Add Mixer</a></p> #}
 
 	<p><a href="{% url 'cocktail_list' %}">Back to cocktail list</a></p>
 {% endblock %}

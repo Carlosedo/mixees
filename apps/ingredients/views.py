@@ -1,9 +1,9 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
 
-from apps.ingredients.models import Spirit, Mixer, Ingredient, MixerIngredient
+from apps.ingredients.models import Spirit, Mixer, Ingredient
 from apps.cocktails.models import Cocktail
-from apps.ingredients.forms import IngredientCreateForm, MixerIngredientCreateForm
+from apps.ingredients.forms import IngredientCreateForm 
 
 
 class IngredientListView(ListView):
@@ -12,6 +12,7 @@ class IngredientListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super(IngredientListView, self).get_context_data(**kwargs)
+        context['spirits'] = Spirit.objects.all()
         context['mixers'] = Mixer.objects.all()
         return context
 
@@ -26,7 +27,7 @@ class MixerDetailView(DetailView):
 
 class SpiritCreateView(CreateView):
     model = Spirit
-    fields =['name', 'slug']
+    fields =['name', 'slug', 'volume']
 
 
 class MixerCreateView(CreateView):
@@ -44,27 +45,10 @@ class IngredientCreateView(CreateView):
         return form
 
     def get_success_url(self):
-        if '_addspirit' in self.request.POST:
-            return reverse('ingredient_create', kwargs={'slug': self.kwargs['slug']})
-        elif '_addmixer' in self.request.POST:
-            return reverse('mixeringredient_create', kwargs={'slug': self.kwargs['slug']})
-        return reverse('cocktail_detail', kwargs={'slug': self.kwargs['slug']})
-
-
-class MixerIngredientCreateView(CreateView):
-    model = MixerIngredient
-    form_class = MixerIngredientCreateForm
-
-    def get_form(self, form_class):
-        form = super(MixerIngredientCreateView, self).get_form(form_class)
-        form.instance.cocktail = Cocktail.objects.get(slug=self.kwargs['slug'])
-        return form
-
-    def get_success_url(self):
-        if '_addspirit' in self.request.POST:
-            return reverse('ingredient_create', kwargs={'slug': self.kwargs['slug']})
-        elif '_addmixer' in self.request.POST:
-            return reverse('mixeringredient_create', kwargs={'slug': self.kwargs['slug']})
+        # if '_addspirit' in self.request.POST:
+        #     return reverse('ingredient_create', kwargs={'slug': self.kwargs['slug']})
+        # elif '_addmixer' in self.request.POST:
+        #     return reverse('mixeringredient_create', kwargs={'slug': self.kwargs['slug']})
         return reverse('cocktail_detail', kwargs={'slug': self.kwargs['slug']})
 
 
@@ -77,10 +61,6 @@ class DeleteMixin(object):
 
 class IngredientDeleteView(DeleteMixin, DeleteView):
     model = Ingredient
-
-
-class MixerIngredientDeleteView(DeleteMixin, DeleteView):
-    model = MixerIngredient
     template_name="ingredients/ingredient_confirm_delete.html"
 
 

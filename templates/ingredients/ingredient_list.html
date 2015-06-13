@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Ingredients{% endblock %}
+
+{% block content %}
+	<h1>Ingredients</h1>
+	<h2>Spirits</h2>
+	<ul>
+		{% for spirit in spirits %}
+			<li><a href="{% url 'spirit_detail' spirit.slug %}">{{ spirit }}</a></li>
+		{% endfor %}
+	</ul>
+	<h2>Mixers</h2>
+	<ul>
+		{% for mixer in mixers %}
+			<li><a href="{% url 'mixer_detail' mixer.slug %}">{{ mixer }}</a></li>
+		{% endfor %}
+	</ul>
+	<a href="{% url 'spirit_create' %}">Add Spirit</a>
+	</br>
+	<a href="{% url 'mixer_create' %}">Add Mixer</a>
+{% endblock %}

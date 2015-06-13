@@ -4,6 +4,7 @@
 
 {% block content %}
 	<h1>{{ object }}</h1>
-	<a href="{% url "ingredient_list" %}">Back to ingredient list</a>
+    <p>Volume: {{ object.volume_display }}</p>
+	<a href="{% url 'ingredient_list' %}">Back to ingredient list</a>
 {% endblock %}
 	
