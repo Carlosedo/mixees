@@ -8,6 +8,14 @@ from apps.ingredients.models import Spirit, Mixer
 class CocktailListView(ListView):
     model = Cocktail
 
+    def get_context_data(self, **kwargs):
+        context = super(CocktailListView, self).get_context_data(**kwargs)
+        
+        cocktail_list = Cocktail.objects.order_by('-likes')
+        context['cocktail_list'] = cocktail_list
+
+        return context
+
     def get_queryset(self):
         queryset = super(CocktailListView, self).get_queryset()
 
@@ -26,14 +34,22 @@ class CocktailDetailView(DetailView):
         cocktail = kwargs['object']
         ingredients = cocktail.ingredient_set.all()
 
-        context['spirits'] = ingredients.filter(liquid=Spirit)
-        context['mixers'] = ingredients.filter(liquid=Mixer)
+        context['spirits'] = ingredients.exclude(spirit__isnull=True)
+        context['mixers'] = ingredients.exclude(mixer__isnull=True)
+
+        # context['spirits'] = Spirit.objects.filter(
+        #     id__in=ingredients.values_list('spirit', flat=True)
+        # )
+        # import ipdb; ipdb.set_trace()
+        # context['mixers'] = Mixer.objects.filter(
+        #     id__in=ingredients.values_list('mixer', flat=True)
+        # )
         return context
 
 
 class CocktailCreateView(CreateView):
     model = Cocktail
-    fields = ['title', 'slug', 'description']
+    fields = ['title', 'description']
 
     def get_success_url(self):
         return reverse('ingredient_create', kwargs={'slug': self.object.slug})
