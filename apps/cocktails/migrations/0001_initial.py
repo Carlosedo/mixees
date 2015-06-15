@@ -17,6 +17,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(unique=True, max_length=80)),
                 ('slug', models.SlugField(unique=True, max_length=80)),
                 ('description', models.TextField()),
+                ('views', models.IntegerField(default=0)),
+                ('likes', models.IntegerField(default=0)),
             ],
             options={
                 'verbose_name': 'Cocktail',
