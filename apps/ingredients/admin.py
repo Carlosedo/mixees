@@ -6,6 +6,6 @@ admin.site.register(Spirit)
 admin.site.register(Mixer)
 
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('liquid', 'amount', 'measurement', 'cocktail')
+    list_display = ('spirit', 'mixer', 'amount', 'measurement', 'cocktail')
 
 admin.site.register(Ingredient, IngredientAdmin)

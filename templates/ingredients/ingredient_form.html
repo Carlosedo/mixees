@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Add Spirit{% endblock %}
+{% block title %}Add {{ ingredient_type }}{% endblock %}
 
 {% block content %}
 	
-	<h1>Already added Spirits</h1>
+	<h1>Already added {{ ingredient_type }}s</h1>
 
 	<ul>
 		{% if form.instance.cocktail.ingredient_set.all %}
@@ -17,7 +17,7 @@
 		{% endif %}
 	</ul>
 
-	<h1>Add Spirit</h1>
+	<h1>Add {{ ingredient_type }}</h1>
 
 	<form method="post">
 	    {% csrf_token %}

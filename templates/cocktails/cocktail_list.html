@@ -10,8 +10,8 @@
 	{% include "cocktails/_cocktail_search.html" %}
 
 	<ul>
-		{% for object in cocktail_list %}
-			<li><a href="{% url 'cocktail_detail' object.slug %}">{{ object }}</a></li>
+		{% for cocktail in cocktail_list %}
+			<li><a href="{% url 'cocktail_detail' cocktail.slug %}">{{ cocktail }}</a></li>
 		{% endfor %}
 	</ul>
 

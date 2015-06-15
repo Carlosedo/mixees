@@ -5,4 +5,4 @@ from apps.ingredients.models import Ingredient
 class IngredientCreateForm(ModelForm):
     class Meta:
         model = Ingredient
-        fields = ['amount', 'measurement', 'liquid']
+        fields = ['amount', 'measurement', 'spirit', 'mixer']
