@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django.template.defaultfilters import slugify
 # from django.contrib.contenttypes import generic
 # from django.contrib.contenttypes.models import ContentType
 
@@ -20,8 +21,15 @@ class Liquid(models.Model):
     name = models.CharField(max_length=20, unique=True)
     slug = models.CharField(max_length=20, unique=True)
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Liquid, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.name  
+
+    class Meta:
+        abstract = True
 
 
 class Spirit(Liquid):
@@ -51,23 +59,12 @@ class Mixer(Liquid):
 
 
 class Ingredient(models.Model):
-    """Base class for mixers and spirits"""
+    """Ingredient class is the join for Cocktails and Liquids"""
     cocktail = models.ForeignKey(Cocktail)
     amount = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     measurement = models.SmallIntegerField(choices=MEASUREMENT_CHOICES)
-    liquid = models.ForeignKey(Liquid)
-
-    # models that can be linked to the generic foreign key
-    # limit = models.Q(app_label='ingredients', model='Spirit') | \
-    #     models.Q(app_label='ingredients', model='Mixer')
-    # content_type = models.ForeignKey(
-    #     ContentType,
-    #     limit_choices_to=limit,
-    #     null=True,
-    #     blank=True,
-    # )
-    # object_id = models.PositiveIntegerField(null=True)
-    # liquid = generic.GenericForeignKey('content_type', 'object_id')
+    spirit = models.ForeignKey(Spirit, blank=True, null=True)
+    mixer = models.ForeignKey(Mixer, blank=True, null=True)
 
     class Meta:
         verbose_name = "Ingredient"
@@ -76,19 +73,4 @@ class Ingredient(models.Model):
     def __unicode__(self):
         return "%g %s" % (self.amount, self.get_measurement_display())
         
-
-# class SpiritIngredient(Ingredient):
-#     spirits = models.ForeignKey(Spirit)
-
-#     class Meta:
-#         verbose_name = "Ingredient"
-#         verbose_name_plural = "Ingredients"
-
-
-# class MixerIngredient(Ingredient):
-#     mixers = models.ForeignKey(Mixer)
-
-#     class Meta:
-#         verbose_name = "Mixer Ingredient"
-#         verbose_name_plural = "Mixer Ingredients"
 
