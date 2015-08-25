@@ -10,7 +10,7 @@ class CocktailListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CocktailListView, self).get_context_data(**kwargs)
-        
+
         cocktail_list = Cocktail.objects.order_by('-likes')
         context['cocktail_list'] = cocktail_list
 

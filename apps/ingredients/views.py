@@ -4,12 +4,12 @@ from django.forms import HiddenInput
 
 from apps.ingredients.models import Spirit, Mixer, Ingredient
 from apps.cocktails.models import Cocktail
-from apps.ingredients.forms import IngredientCreateForm 
+from apps.ingredients.forms import IngredientCreateForm
 
 
 class IngredientListView(ListView):
     template_name = 'ingredients/ingredient_list.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(IngredientListView, self).get_context_data(**kwargs)
         context['spirits'] = Spirit.objects.all()
@@ -77,10 +77,10 @@ class IngredientCreateView(CreateView):
 
 class DeleteMixin(object):
     """Adds successful url functionality to DeleteViews"""
-    
+
     def get_success_url(self):
         return reverse('cocktail_detail', args=[self.kwargs['slug']])
-        
+
 
 class IngredientDeleteView(DeleteMixin, DeleteView):
     model = Ingredient

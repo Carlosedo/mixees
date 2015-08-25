@@ -36,9 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'apps.core',
     'apps.cocktails',
     'apps.home',
     'apps.ingredients',
+    'apps.users',
     'crispy_forms',
 )
 
@@ -101,3 +103,4 @@ TEMPLATE_DIRS = (
 MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+

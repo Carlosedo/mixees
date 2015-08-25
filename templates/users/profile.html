@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Profile page{% endblock %}
+
+{% block content %}
+    <h1>Hi {{ object.user.username }}! This is your profile page.</h1>
+
+    <img src="{{ MEDIA_URL }}{{ object.image }}">
+
+    <p>Email: {{ object.user.email }}</p>
+    <p>Twitter: {{ object.twitter }}</p>
+    <p>Facebook: {{ object.facebook }}</p>
+
+    <p><a href="{% url 'homepage' %}">Back to home</a></p>
+{% endblock %}
