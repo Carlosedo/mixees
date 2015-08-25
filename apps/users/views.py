@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.views.generic import DetailView
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import DetailView, FormView
 
 from apps.core.generics import MultiFormView
 from .models import UserProfile
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, LoginForm
 
 
 class CreateAccountView(MultiFormView):
@@ -44,15 +46,62 @@ class CreateAccountView(MultiFormView):
             # Now we save the UserProfile model instance.
             profile.save()
 
-            # Update our variable to tell the template registration was successful.
-            registered = True
-
             return HttpResponseRedirect(self.get_success_url())
         else:
             print user_form.errors, profile_form.errors
 
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'user_id': self.object.id})
+
+
+class LoginView(FormView):
+    form_class = LoginForm
+    template_name = "users/login.html"
+
+    success_url = 'homepage'
+
+    def post(self, request, *args, **kwargs):
+        # Gather the username and password provided by the user.
+        # This information is obtained from the login form.
+                # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
+                # because the request.POST.get('<variable>') returns None, if the value does not exist,
+                # while the request.POST['<variable>'] will raise key error exception
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Use Django's machinery to attempt to see if the username/password
+        # combination is valid - a User object is returned if it is.
+        user = authenticate(username=username, password=password)
+
+        # If we have a User object, the details are correct.
+        # If None (Python's way of representing the absence of a value), no user
+        # with matching credentials was found.
+        if user:
+            # Is the account active? It could have been disabled.
+            if user.is_active:
+                # If the account is valid and active, we can log the user in.
+                # We'll send the user back to the homepage.
+                login(request, user)
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                # An inactive account was used - no logging in!
+                return HttpResponse("Your Mixees account is disabled.")
+        else:
+            # Bad login details were provided. So we can't log the user in.
+            print "Invalid login details: {0}, {1}".format(username, password)
+            return HttpResponse("Invalid login details supplied.")
+
+    def get_success_url(self):
+        return reverse(self.success_url)
+
+
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+
+    # Take the user back to the homepage.
+    return HttpResponseRedirect(reverse('homepage'))
 
 
 class UserProfileView(DetailView):

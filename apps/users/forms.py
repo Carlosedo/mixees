@@ -25,3 +25,14 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('twitter', 'facebook', 'image')
+
+class LoginForm(forms.Form):
+    username = forms.EmailField(
+        label='username',
+        widget=forms.TextInput()
+    )
+    password = forms.CharField(
+        max_length=100,
+        label='password',
+        widget=forms.PasswordInput()
+    )
