@@ -1,13 +1,16 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+)
 from django.core.urlresolvers import reverse
 from django.forms import HiddenInput
 
+from apps.core.mixins import LoginRequiredMixin
 from apps.ingredients.models import Spirit, Mixer, Ingredient
 from apps.cocktails.models import Cocktail
 from apps.ingredients.forms import IngredientCreateForm
 
 
-class IngredientListView(ListView):
+class IngredientListView(TemplateView):
     template_name = 'ingredients/ingredient_list.html'
 
     def get_context_data(self, **kwargs):
@@ -25,17 +28,17 @@ class MixerDetailView(DetailView):
     model = Mixer
 
 
-class SpiritCreateView(CreateView):
+class SpiritCreateView(LoginRequiredMixin, CreateView):
     model = Spirit
     fields =['name', 'volume']
 
 
-class MixerCreateView(CreateView):
+class MixerCreateView(LoginRequiredMixin, CreateView):
     model = Mixer
     fields =['name']
 
 
-class IngredientCreateView(CreateView):
+class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     form_class = IngredientCreateForm
 

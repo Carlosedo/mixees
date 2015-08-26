@@ -4,7 +4,6 @@ from django.template.defaultfilters import slugify
 # from django.contrib.contenttypes import generic
 # from django.contrib.contenttypes.models import ContentType
 
-
 from apps.cocktails.models import Cocktail
 
 MEASUREMENT_CHOICES = (
@@ -20,13 +19,13 @@ class Liquid(models.Model):
     """Base class for Spirit and Mixer"""
     name = models.CharField(max_length=20, unique=True)
     slug = models.CharField(max_length=20, unique=True)
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Liquid, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.name  
+        return self.name
 
     class Meta:
         abstract = True
@@ -42,7 +41,7 @@ class Spirit(Liquid):
     @property
     def volume_display(self):
         return "%g%%" % self.volume
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('spirit_detail', [self.slug])
@@ -69,8 +68,8 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = "Ingredient"
         verbose_name_plural = "Ingredients"
-    
+
     def __unicode__(self):
         return "%g %s" % (self.amount, self.get_measurement_display())
-        
+
 

@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.core.urlresolvers import reverse
 
+from apps.core.mixins import LoginRequiredMixin
 from apps.cocktails.models import Cocktail
 from apps.ingredients.models import Spirit, Mixer
 
@@ -47,7 +48,7 @@ class CocktailDetailView(DetailView):
         return context
 
 
-class CocktailCreateView(CreateView):
+class CocktailCreateView(LoginRequiredMixin, CreateView):
     model = Cocktail
     fields = ['title', 'description']
 
@@ -55,7 +56,7 @@ class CocktailCreateView(CreateView):
         return reverse('ingredient_create', kwargs={'slug': self.object.slug})
 
 
-class CocktailUpdateView(UpdateView):
+class CocktailUpdateView(LoginRequiredMixin, UpdateView):
     model = Cocktail
     template_name = "cocktails/cocktail_update_form.html"
     fields = ['description']

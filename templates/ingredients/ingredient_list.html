@@ -16,7 +16,11 @@
 			<li><a href="{% url 'mixer_detail' mixer.slug %}">{{ mixer }}</a></li>
 		{% endfor %}
 	</ul>
-	<a href="{% url 'spirit_create' %}">Add Spirit</a>
-	</br>
-	<a href="{% url 'mixer_create' %}">Add Mixer</a>
+	{% if user.is_authenticated %}
+		<a href="{% url 'spirit_create' %}">Add Spirit</a>
+		</br>
+		<a href="{% url 'mixer_create' %}">Add Mixer</a>
+	{% else %}
+		<p><a href="{% url 'users.register' %}">Register</a> or <a href="{% url 'users.login' %}?next={{ request.path }}">Login</a> to add new ingredients.</p>
+    {% endif %}
 {% endblock %}

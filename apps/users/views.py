@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import DetailView, FormView
 
 from apps.core.generics import MultiFormView
+from apps.core.mixins import LoginRequiredMixin
 from .models import UserProfile
 from .forms import UserForm, UserProfileForm, LoginForm
 
@@ -92,6 +93,9 @@ class LoginView(FormView):
             return HttpResponse("Invalid login details supplied.")
 
     def get_success_url(self):
+        redirect_to = self.request.REQUEST.get('next', '')
+        if redirect_to:
+            return redirect_to
         return reverse(self.success_url)
 
 
@@ -104,6 +108,6 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('homepage'))
 
 
-class UserProfileView(DetailView):
+class UserProfileView(LoginRequiredMixin, DetailView):
     model = UserProfile
     template_name = "users/profile.html"
