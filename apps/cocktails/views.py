@@ -9,21 +9,13 @@ from apps.ingredients.models import Spirit, Mixer
 class CocktailListView(ListView):
     model = Cocktail
 
-    def get_context_data(self, **kwargs):
-        context = super(CocktailListView, self).get_context_data(**kwargs)
-
-        cocktail_list = Cocktail.objects.order_by('-likes')
-        context['cocktail_list'] = cocktail_list
-
-        return context
-
     def get_queryset(self):
         queryset = super(CocktailListView, self).get_queryset()
 
         q = self.request.GET.get("q")
         if q:
-            return queryset.filter(title__icontains=q)
-        return queryset
+            return queryset.filter(title__icontains=q).order_by('-likes')
+        return queryset.order_by('-likes')
 
 
 class CocktailDetailView(DetailView):

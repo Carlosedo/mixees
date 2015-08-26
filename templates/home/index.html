@@ -6,6 +6,8 @@
 	<h1>Hello World</h1>
     <p> visits: {{ visits }}</p>
 
+    {% include "cocktails/_cocktail_search.html" %}
+    <br>
 	<a href="{% url 'cocktail_list' %}">Access Cocktails</a>
 	<br>
 	<a href="{% url 'ingredient_list' %}">Access Ingredients</a>
