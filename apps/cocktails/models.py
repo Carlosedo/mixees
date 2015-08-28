@@ -7,7 +7,6 @@ class Cocktail(models.Model):
     slug = models.SlugField(max_length=80, unique=True)
     description = models.TextField()
     views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Cocktail"
@@ -24,4 +23,3 @@ class Cocktail(models.Model):
     def get_absolute_url(self):
         return ('cocktail_detail', [self.slug])
 
-    

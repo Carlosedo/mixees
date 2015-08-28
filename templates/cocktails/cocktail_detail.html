@@ -6,7 +6,13 @@
 	<h1>{{ object.title }}</h1>
 
 	<p>Views: {{ object.views }}</p>
-	<p>Likes: {{ object.likes }}</p>
+	<div id="like_count">{{ likes }}</div>
+
+	{% if user.is_authenticated %}
+		<button id="likes" class="btn {% if liked_by_user %}btn-danger{% endif %}" data-cocktail-id="{{ object.id }}" data-cocktail-liked="{{ liked_by_user }}">
+			<i class="fa fa-heart"></i>
+		</button>
+	{% endif %}
 
 	<h2>Spirits</h2>
 

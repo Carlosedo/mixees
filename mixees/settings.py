@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'apps.ingredients',
     'apps.users',
     'crispy_forms',
+    'braces',
 )
 
 MIDDLEWARE_CLASSES = (

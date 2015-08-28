@@ -38,6 +38,7 @@ class CreateAccountView(MultiFormView):
             # This delays saving the model until we're ready to avoid integrity problems.
             profile = profile_form.save(commit=False)
             profile.user = user
+            user_id = user.id
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -47,12 +48,15 @@ class CreateAccountView(MultiFormView):
             # Now we save the UserProfile model instance.
             profile.save()
 
-            return HttpResponseRedirect(self.get_success_url())
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            login(request, user)
+
+            return HttpResponseRedirect(self.get_success_url(user_id))
         else:
             print user_form.errors, profile_form.errors
 
-    def get_success_url(self):
-        return reverse(self.success_url, kwargs={'user_id': self.object.id})
+    def get_success_url(self, user_id):
+        return reverse(self.success_url, kwargs={'pk': user_id})
 
 
 class LoginView(FormView):

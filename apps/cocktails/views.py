@@ -1,9 +1,12 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
 from django.core.urlresolvers import reverse
 
 from apps.core.mixins import LoginRequiredMixin
-from apps.cocktails.models import Cocktail
 from apps.ingredients.models import Spirit, Mixer
+from apps.users.models import UserProfile
+from .models import Cocktail
+
+from braces.views import AjaxResponseMixin, JSONResponseMixin
 
 
 class CocktailListView(ListView):
@@ -14,8 +17,8 @@ class CocktailListView(ListView):
 
         q = self.request.GET.get("q")
         if q:
-            return queryset.filter(title__icontains=q).order_by('-likes')
-        return queryset.order_by('-likes')
+            return queryset.filter(title__icontains=q).order_by('-views')
+        return queryset.order_by('-views')
 
 
 class CocktailDetailView(DetailView):
@@ -25,18 +28,19 @@ class CocktailDetailView(DetailView):
         context = super(CocktailDetailView, self).get_context_data(**kwargs)
 
         cocktail = kwargs['object']
-        ingredients = cocktail.ingredient_set.all()
+        user = UserProfile.objects.get(user__id=self.request.user.id)
 
+        ingredients = cocktail.ingredient_set.all()
         context['spirits'] = ingredients.exclude(spirit__isnull=True)
         context['mixers'] = ingredients.exclude(mixer__isnull=True)
 
-        # context['spirits'] = Spirit.objects.filter(
-        #     id__in=ingredients.values_list('spirit', flat=True)
-        # )
-        # import ipdb; ipdb.set_trace()
-        # context['mixers'] = Mixer.objects.filter(
-        #     id__in=ingredients.values_list('mixer', flat=True)
-        # )
+        cocktail.views += 1
+        cocktail.save()
+
+        users_who_liked = UserProfile.objects.filter(liked_cocktails__slug=cocktail.slug)
+        context['likes'] = users_who_liked.count()
+        context['liked_by_user'] = 1 if user in users_who_liked else 0
+
         return context
 
 
@@ -54,4 +58,23 @@ class CocktailUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['description']
 
 
+class CocktailLikeView(JSONResponseMixin, AjaxResponseMixin, View):
+    def get_ajax(self, request, *args, **kwargs):
+        cocktail_id = request.GET['cocktail_id']
+        already_liked = bool(int(request.GET['already_liked']))
+        user_id = request.user.id
 
+        if cocktail_id and user_id:
+            cocktail = Cocktail.objects.get(id=int(cocktail_id))
+            user = UserProfile.objects.get(id=int(user_id))
+
+            if already_liked:
+                user.liked_cocktails.remove(cocktail)
+            else:
+                user.liked_cocktails.add(cocktail)
+
+
+        return self.render_json_response({
+            'likes': UserProfile.objects.filter(liked_cocktails__slug=cocktail.slug).count(),
+            'liked_by_user': 0 if already_liked else 1
+        })

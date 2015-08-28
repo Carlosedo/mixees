@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+{% load staticfiles %}<!DOCTYPE html>
 <html>
 	<head>
 		<title>{% block title %}Generic title{% endblock %}</title>
 		<!-- Bootstrap -->
-		<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+		<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	</head>
 	<body>
 		<nav class="navbar navbar-default">
@@ -42,6 +43,7 @@
 			{% endblock %}
 		</div>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/mixees-ajax.js' %}"></script>
 	</body>
 </html>
