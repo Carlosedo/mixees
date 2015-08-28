@@ -14,6 +14,8 @@ class Cocktail(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        if self.views < 0:
+            self.views = 0
         super(Cocktail, self).save(*args, **kwargs)
 
     def __unicode__(self):

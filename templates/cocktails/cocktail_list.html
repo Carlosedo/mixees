@@ -9,11 +9,15 @@
 
 	{% include "cocktails/_cocktail_search.html" %}
 
-	<ul>
-		{% for cocktail in cocktail_list %}
-			<li><a href="{% url 'cocktail_detail' cocktail.slug %}">{{ cocktail }}</a></li>
-		{% endfor %}
-	</ul>
+	{% if cocktail_list %}
+		<ul>
+			{% for cocktail in cocktail_list %}
+				<li><a href="{% url 'cocktail_detail' cocktail.slug %}">{{ cocktail }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>There are no cocktails in the database.</p>
+	{% endif %}
 
     {% if user.is_authenticated %}
 	   <a href="{% url 'cocktail_create' %}" class="btn btn-primary">Add new</a>
