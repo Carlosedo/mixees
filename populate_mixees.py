@@ -23,14 +23,14 @@ def populate():
         title='Cuba Libre',
         slug='cuba-libre',
         description='Typical cuban drink',
-        likes=10,
+        views=10,
     )
 
     gin_tonic = add_cocktail(
         title='Gin and Tonic',
         slug='gin-and-tonic',
         description='Fashionable drink',
-        likes=5,
+        views=5,
     )
 
     screwdriver = add_cocktail(
@@ -49,7 +49,7 @@ def populate():
         title='Vodka Gintini',
         slug='vodka-gintini',
         description='Vodka Martini with a twist',
-        likes=7,
+        views=7,
     )
 
     add_ingredient(
@@ -143,13 +143,12 @@ def add_mixer(name, slug):
     )[0]
     return m
 
-def add_cocktail(title, slug, description, views=0, likes=0):
+def add_cocktail(title, slug, description, views=0):
     c = Cocktail.objects.get_or_create(
         title=title,
         slug = slug,
         description = description,
-        views = views,
-        likes = likes
+        views = views
     )[0]
     return c
 
