@@ -1,4 +1,6 @@
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import (
+    View, ListView, DetailView, CreateView, UpdateView, DeleteView
+)
 from django.core.urlresolvers import reverse
 
 from apps.core.mixins import LoginRequiredMixin
@@ -49,13 +51,27 @@ class CocktailCreateView(LoginRequiredMixin, CreateView):
     fields = ['title', 'description']
 
     def get_success_url(self):
-        return reverse('ingredient_create', kwargs={'slug': self.object.slug})
+        return reverse(
+            'ingredient_create',
+            kwargs={
+                'slug': self.object.slug,
+                'type': 'spirit'
+            }
+        )
 
 
 class CocktailUpdateView(LoginRequiredMixin, UpdateView):
     model = Cocktail
     template_name = "cocktails/cocktail_update_form.html"
     fields = ['description']
+
+
+class CocktailDeleteView(DeleteView):
+    model = Cocktail
+    template_name="cocktails/cocktail_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse('cocktail_list')
 
 
 class CocktailLikeView(JSONResponseMixin, AjaxResponseMixin, View):

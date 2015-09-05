@@ -38,7 +38,7 @@
 	<p><a href="{% url 'ingredient_create' object.slug 'spirit' %}">Add Spirit</a></p>
 	<p><a href="{% url 'ingredient_create' object.slug 'mixer' %}">Add Mixer</a></p>
 
-	{# <p><a href="{% url 'mixeringredient_create' object.slug %}">Add Mixer</a></p> #}
+	<p><a href="{% url 'cocktail_delete' object.slug %}">Delete cocktail</a></p>
 
 	<p><a href="{% url 'cocktail_list' %}">Back to cocktail list</a></p>
 {% endblock %}

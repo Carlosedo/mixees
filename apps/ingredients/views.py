@@ -78,15 +78,9 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
         return reverse('cocktail_detail', kwargs={'slug': self.kwargs['slug']})
 
 
-class DeleteMixin(object):
-    """Adds successful url functionality to DeleteViews"""
-
-    def get_success_url(self):
-        return reverse('cocktail_detail', args=[self.kwargs['slug']])
-
-
-class IngredientDeleteView(DeleteMixin, DeleteView):
+class IngredientDeleteView(DeleteView):
     model = Ingredient
     template_name="ingredients/ingredient_confirm_delete.html"
 
-
+    def get_success_url(self):
+        return reverse('cocktail_detail', args=[self.kwargs['slug']])
