@@ -16,23 +16,59 @@ class NewVisitorTest(unittest.TestCase):
 
         # She notices the page title and header mention cocktails
         self.assertIn('Cocktails', self.browser.title)
-        self.fail('Finish the test!')
 
-        # [...rest of comments as before]
+        # She sees that she needs to login in order to add a new cocktail
+        login_button = self.browser.find_element_by_id('login')
+        self.assertIn('Login', login_button.text)
+
+        # She clicks the login button to go to the login page
+        login_button.click()
+        self.assertIn('Login', self.browser.title)
+
+        # She fills the form with the login details and submits
+        username = self.browser.find_element_by_id('id_username')
+        password = self.browser.find_element_by_id('id_password')
+
+        username.send_keys('test_username')
+        password.send_keys('test_password')
+
+        self.browser.find_element_by_name('submit').click()
+
+        # Once she is logged in she is redirected back to the cocktail list
+        # Where she can now create a cocktail
+        self.assertIn('Cocktails', self.browser.title)
+        self.browser.find_element_by_link_text('Add new').click()
+
+        # Now she needs to provide a name and description for the cocktail
+        self.assertIn('Add cocktail', self.browser.title)
+
+        title = self.browser.find_element_by_name('title')
+        description = self.browser.find_element_by_name('description')
+
+        title.send_keys('test_cocktail')
+        description.send_keys('test_description')
+
+        title.submit()
+
+        # She is now taken to the add spirit screen, where she saves without
+        # addding anything
+        self.assertIn('Add spirit', self.browser.title)
+
+        self.browser.find_element_by_link_text('Back to Cocktail').click()
+
+        # She is now in the cocktail detail view, where she will finally
+        # delete the cocktail
+        self.assertIn('test_cocktail', self.browser.title)
+
+        self.browser.find_element_by_link_text('Delete cocktail').click()
+        self.browser.find_element_by_id('delete').click()
+
+
 
 if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+    unittest.main()
 
 
-
-# She access the cocktail list
-
-# She logs in so that she can create a cocktail
-
-# She goes to the cocktail creation page
-
-# She types test-cocktail as name
-# She types test description as description
 
 # Then she creates one spirit ingredient (with data: 1 part of Rum)
 # And goes to create mixer
@@ -41,7 +77,6 @@ if __name__ == '__main__':
 
 # As she likes the cocktail she just created she clicks on the favourite icon
 
-# Finally, as this is just a test, she deletes the cocktail
 
 # ------------------------------------------------------------------------------
 # EXTRA

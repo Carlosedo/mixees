@@ -22,6 +22,6 @@
     {% if user.is_authenticated %}
 	   <a href="{% url 'cocktail_create' %}" class="btn btn-primary">Add new</a>
 	{% else %}
-		<p><a href="{% url 'users.register' %}">Register</a> or <a href="{% url 'users.login' %}?next={{ request.path }}">Login</a> to add new cocktails.</p>
+		<p><a id="register" href="{% url 'users.register' %}?next={{ request.path }}">Register</a> or <a id="login" href="{% url 'users.login' %}?next={{ request.path }}">Login</a> to add new cocktails.</p>
     {% endif %}
 {% endblock %}

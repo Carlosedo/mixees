@@ -35,7 +35,7 @@ class ListViewTests(TestCase):
 
     def test_index_view_with_categories(self):
         """
-        If no cocktails exist, an appropriate message should be displayed.
+        If some cocktails are created, they should be displayed
         """
         add_cocktail('test',1)
         add_cocktail('temp',1)
