@@ -4,50 +4,45 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mixees.settings')
 import django
 django.setup()
 
+from apps.core.populate_helpers import add_spirit, add_mixer, add_cocktail, add_ingredient
 from apps.cocktails.models import Cocktail
-from apps.ingredients.models import Liquid, Spirit, Mixer, Ingredient
 
 
 def populate():
-    rum = add_spirit('Rum', 'rum', 39)
-    vodka = add_spirit('Vodka', 'vodka', 40)
-    gin = add_spirit('Gin', 'gin', 42)
-    whiskey = add_spirit('Whiskey', 'whiskey', 40)
+    rum = add_spirit('Rum', 39)
+    vodka = add_spirit('Vodka', 40)
+    gin = add_spirit('Gin', 42)
+    whiskey = add_spirit('Whiskey', 40)
 
-    coke = add_mixer('Coke', 'coke')
-    orange = add_mixer('Orange', 'orange')
-    tonic = add_mixer('Tonic', 'tonic')
-    red_bull = add_mixer('Red Bull', 'red-bull')
+    coke = add_mixer('Coke')
+    orange = add_mixer('Orange')
+    tonic = add_mixer('Tonic')
+    red_bull = add_mixer('Red Bull')
 
     cuba_libre = add_cocktail(
         title='Cuba Libre',
-        slug='cuba-libre',
         description='Typical cuban drink',
         views=10,
     )
 
     gin_tonic = add_cocktail(
         title='Gin and Tonic',
-        slug='gin-and-tonic',
         description='Fashionable drink',
         views=5,
     )
 
     screwdriver = add_cocktail(
         title='Screwdriver',
-        slug='screwdriver',
         description='Fresh vodka drink',
     )
 
     wings = add_cocktail(
         title='Wings',
-        slug='wings',
         description='This drink gives you wings',
     )
 
     vodka_gin = add_cocktail(
         title='Vodka Gintini',
-        slug='vodka-gintini',
         description='Vodka Martini with a twist',
         views=7,
     )
@@ -127,41 +122,6 @@ def populate():
         for i in c.ingredient_set.all():
             print "- {0} - {1}".format(str(c), str(i))
 
-
-def add_spirit(name, slug, volume):
-    s = Spirit.objects.get_or_create(
-        name=name,
-        slug=slug,
-        volume=volume
-    )[0]
-    return s
-
-def add_mixer(name, slug):
-    m = Mixer.objects.get_or_create(
-        name=name,
-        slug=slug
-    )[0]
-    return m
-
-def add_cocktail(title, slug, description, views=0):
-    c = Cocktail.objects.get_or_create(
-        title=title,
-        slug = slug,
-        description = description,
-        views = views
-    )[0]
-    return c
-
-def add_ingredient(cocktail, amount, measurement, spirit=None, mixer=None):
-    i = Ingredient.objects.get_or_create(
-        cocktail=cocktail,
-        amount=amount,
-        measurement=measurement,
-        spirit=spirit,
-        mixer=mixer
-    )[0]
-    i.save()
-    return i
 
 # Start execution here!
 if __name__ == '__main__':

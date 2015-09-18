@@ -18,8 +18,7 @@ class CocktailMethodTests(TestCase):
         """
         ensure_views_are_positive should results True for cocktails where views are zero or positive
         """
-        cocktail = Cocktail(title='test',views=-1)
-        cocktail.save()
+        cocktail = add_cocktail('test', -1)
         self.assertEqual((cocktail.views >= 0), True)
 
 
