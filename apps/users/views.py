@@ -53,7 +53,7 @@ class CreateAccountView(MultiFormView):
 
             return HttpResponseRedirect(self.get_success_url(user_id))
         else:
-            print user_form.errors, profile_form.errors
+            print (user_form.errors, profile_form.errors)
 
     def get_success_url(self, user_id):
         return reverse(self.success_url, kwargs={'pk': user_id})
@@ -93,7 +93,7 @@ class LoginView(FormView):
                 return HttpResponse("Your Mixees account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
-            print "Invalid login details: {0}, {1}".format(username, password)
+            print ("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
 
     def get_success_url(self):

@@ -1,10 +1,28 @@
+import sys
+
 from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.auth.models import User
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -14,7 +32,10 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.quit()
 
     def test_can_create_a_cocktail_and_delete_it_later(self):
+        # TODO: User.objects.create_user('test_username', 'myemail@test.com', 'test_password')
+
         # She access the cocktail list
+        # TODO: change this hardcoded url to "self.server_url" when you solve the 500 error
         self.browser.get('http://localhost:8000/cocktails/')
 
         # She notices the page title and header mention cocktails
