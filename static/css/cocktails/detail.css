@@ -1,0 +1,34 @@
+#drawing {
+    background-color: grey;
+    border: 3px solid;
+    height: 210px;
+    width: 150px;
+}
+
+.vodka {
+    background-color: white;
+}
+
+.whiskey {
+    background-color: brown;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.coke {
+    background-color: #330B0C;
+}
+
+.parts-1 {
+    height: 30px;
+}
+
+.parts-2 {
+    height: 60px;
+}
+
+.parts-3 {
+    height: 90px;
+}

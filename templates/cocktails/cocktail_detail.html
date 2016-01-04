@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% load static mixees_filters %}
 
 {% block title %}{{ object }}{% endblock %}
+
+{% block extra_css %}
+	<link href="{% static 'css/cocktails/detail.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 	<h1>{{ object.title }}</h1>
@@ -17,7 +22,7 @@
 	<h2>Spirits</h2>
 
 	<ul>
-		{% for ingredient in spirits %}
+		{% for ingredient in spirit_ingredients %}
 			<li>{{ ingredient }} of <a href="{% url 'spirit_detail' ingredient.spirit.slug %}">{{ ingredient.spirit }}</a>. <a href="{% url 'ingredient_delete' object.slug ingredient.id %}">x</a></li>
 	    {% endfor %}
 	</ul>
@@ -25,13 +30,15 @@
 	<h2>Mixers</h2>
 
 	<ul>
-		{% for ingredient in mixers %}
+		{% for ingredient in mixer_ingredients %}
 			<li>{{ ingredient }} of <a href="{% url 'mixer_detail' ingredient.mixer.slug %}">{{ ingredient.mixer }}</a>. <a href="{% url 'ingredient_delete' object.slug ingredient.id %}">x</a></li>
 	    {% endfor %}
 	</ul>
 
 	<h2>Description</h2>
 	<p>{{ object.description|default:"No description" }}</p>
+
+	<div id="drawing"></div>
 
 	<p><a href="{% url 'cocktail_update' object.slug %}">Edit description</a></p>
 
@@ -41,4 +48,16 @@
 	<p><a href="{% url 'cocktail_delete' object.slug %}">Delete cocktail</a></p>
 
 	<p><a href="{% url 'cocktail_list' %}">Back to cocktail list</a></p>
+{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript" src="{% static "js/cocktails/detail.js" %}"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+      draw_cocktail(
+      	{{ spirits|jsonify }},
+      	{{ mixers|jsonify }}
+      );
+    });
+	</script>
 {% endblock %}

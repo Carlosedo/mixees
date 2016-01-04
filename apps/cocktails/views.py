@@ -30,18 +30,29 @@ class CocktailDetailView(DetailView):
         context = super(CocktailDetailView, self).get_context_data(**kwargs)
 
         cocktail = kwargs['object']
-        user = UserProfile.objects.get(user__id=self.request.user.id)
+        # user = UserProfile.objects.get(user__id=self.request.user.id)
 
         ingredients = cocktail.ingredient_set.all()
-        context['spirits'] = ingredients.exclude(spirit__isnull=True)
-        context['mixers'] = ingredients.exclude(mixer__isnull=True)
+        spirit_ingredients = ingredients.exclude(spirit__isnull=True)
+        mixer_ingredients = ingredients.exclude(mixer__isnull=True)
+
+        context['spirit_ingredients'] = spirit_ingredients
+        context['mixer_ingredients'] = mixer_ingredients
+
+        context['spirits'] = []
+        for ingredient in spirit_ingredients:
+            context['spirits'].append({'amount': ingredient.amount, 'ingredient': ingredient.spirit.slug})
+
+        context['mixers'] = []
+        for ingredient in mixer_ingredients:
+            context['mixers'].append({'amount': ingredient.amount, 'ingredient': ingredient.mixer.slug})
 
         cocktail.views += 1
         cocktail.save()
 
         users_who_liked = UserProfile.objects.filter(liked_cocktails__slug=cocktail.slug)
         context['likes'] = users_who_liked.count()
-        context['liked_by_user'] = 1 if user in users_who_liked else 0
+        # context['liked_by_user'] = 1 if user in users_who_liked else 0
 
         return context
 
@@ -68,7 +79,7 @@ class CocktailUpdateView(LoginRequiredMixin, UpdateView):
 
 class CocktailDeleteView(DeleteView):
     model = Cocktail
-    template_name="cocktails/cocktail_confirm_delete.html"
+    template_name = "cocktails/cocktail_confirm_delete.html"
 
     def get_success_url(self):
         return reverse('cocktail_list')
