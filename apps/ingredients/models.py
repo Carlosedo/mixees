@@ -69,6 +69,13 @@ class Ingredient(models.Model):
         verbose_name = "Ingredient"
         verbose_name_plural = "Ingredients"
 
+    def save(self, *args, **kwargs):
+        if self.measurement == 4:
+            self.cocktail.total_parts += self.amount
+            self.cocktail.save()
+
+        super(Ingredient, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return "%g %s" % (self.amount, self.get_measurement_display())
 

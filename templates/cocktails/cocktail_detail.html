@@ -55,6 +55,7 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
       draw_cocktail(
+      	{{ total_parts }},
       	{{ spirits|jsonify }},
       	{{ mixers|jsonify }}
       );

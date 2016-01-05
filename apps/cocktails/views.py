@@ -32,20 +32,26 @@ class CocktailDetailView(DetailView):
         cocktail = kwargs['object']
         # user = UserProfile.objects.get(user__id=self.request.user.id)
 
-        ingredients = cocktail.ingredient_set.all()
-        spirit_ingredients = ingredients.exclude(spirit__isnull=True)
-        mixer_ingredients = ingredients.exclude(mixer__isnull=True)
-
-        context['spirit_ingredients'] = spirit_ingredients
-        context['mixer_ingredients'] = mixer_ingredients
+        context['spirit_ingredients'] = cocktail.ingredient_set.all().exclude(spirit__isnull=True)
+        context['mixer_ingredients'] = cocktail.ingredient_set.all().exclude(mixer__isnull=True)
 
         context['spirits'] = []
-        for ingredient in spirit_ingredients:
-            context['spirits'].append({'amount': ingredient.amount, 'ingredient': ingredient.spirit.slug})
+        for ingredient in context['spirit_ingredients']:
+            context['spirits'].append({
+                'measurement': ingredient.measurement,
+                'amount': ingredient.amount,
+                'ingredient': ingredient.spirit.slug
+            })
 
         context['mixers'] = []
-        for ingredient in mixer_ingredients:
-            context['mixers'].append({'amount': ingredient.amount, 'ingredient': ingredient.mixer.slug})
+        for ingredient in context['mixer_ingredients']:
+            context['mixers'].append({
+                'measurement': ingredient.measurement,
+                'amount': ingredient.amount,
+                'ingredient': ingredient.mixer.slug
+            })
+
+        context['total_parts'] = cocktail.total_parts
 
         cocktail.views += 1
         cocktail.save()

@@ -1,25 +1,42 @@
 #drawing {
     background-color: grey;
     border: 3px solid;
-    height: 210px;
-    width: 150px;
+    height: 216px;
+    width: 156px;
 }
 
 .vodka {
-    background-color: white;
+    background-color: #E5E5E5;
+}
+
+.gin {
+    background-color: #81C7F9;
+}
+
+.rum {
+    background-color: #450F00;
 }
 
 .whiskey {
-    background-color: brown;
+    background-color: #CD530D;
 }
 
 .orange {
-    background-color: orange;
+    background-color: #F69800;
 }
 
 .coke {
-    background-color: #330B0C;
+    background-color: #211212;
 }
+
+.tonic {
+    background-color: #CBC1AA;
+}
+
+.red-bull {
+    background-color: #00009F;
+}
+
 
 .parts-1 {
     height: 30px;

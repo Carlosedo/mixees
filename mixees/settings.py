@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'apps.home',
     'apps.ingredients',
     'apps.users',
+    'apps.tastes',
     'crispy_forms',
     'braces',
 )
