@@ -17,6 +17,10 @@
 		<button id="likes" class="btn {% if liked_by_user %}btn-danger{% endif %}" data-cocktail-id="{{ object.id }}" data-cocktail-liked="{{ liked_by_user }}">
 			<i class="fa fa-heart"></i>
 		</button>
+	{% else %}
+		<button id="likes" class="btn" data-cocktail-id="{{ object.id }}" data-cocktail-liked="false" disabled="disabled">
+			<i class="fa fa-heart"></i>
+		</button>
 	{% endif %}
 
 	<h2>Spirits</h2>

@@ -30,7 +30,6 @@ class CocktailDetailView(DetailView):
         context = super(CocktailDetailView, self).get_context_data(**kwargs)
 
         cocktail = kwargs['object']
-        # user = UserProfile.objects.get(user__id=self.request.user.id)
 
         context['spirit_ingredients'] = cocktail.ingredient_set.all().exclude(spirit__isnull=True)
         context['mixer_ingredients'] = cocktail.ingredient_set.all().exclude(mixer__isnull=True)
@@ -58,7 +57,10 @@ class CocktailDetailView(DetailView):
 
         users_who_liked = UserProfile.objects.filter(liked_cocktails__slug=cocktail.slug)
         context['likes'] = users_who_liked.count()
-        # context['liked_by_user'] = 1 if user in users_who_liked else 0
+
+        if self.request.user.is_authenticated():
+            user = UserProfile.objects.get(user__id=self.request.user.id)
+            context['liked_by_user'] = 1 if user in users_who_liked else 0
 
         return context
 
