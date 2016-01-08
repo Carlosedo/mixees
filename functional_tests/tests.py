@@ -9,7 +9,6 @@ from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
-
     @classmethod
     def setUpClass(cls):
         for arg in sys.argv:
@@ -27,16 +26,18 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
+        User.objects.create_user('test_username', 'myemail@test.com', 'test_password')
 
     def tearDown(self):
         self.browser.quit()
 
     def test_can_create_a_cocktail_and_delete_it_later(self):
-        # TODO: User.objects.create_user('test_username', 'myemail@test.com', 'test_password')
-
         # She access the cocktail list
         # TODO: change this hardcoded url to "self.server_url" when you solve the 500 error
-        self.browser.get('http://localhost:8000/cocktails/')
+        if self.server_url:
+            self.browser.get(self.server_url + '/cocktails/')
+        else:
+            self.browser.get('http://localhost:8000/cocktails/')
 
         # She notices the page title and header mention cocktails
         self.assertIn('Cocktails', self.browser.title)
@@ -69,8 +70,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         title = self.browser.find_element_by_name('title')
         description = self.browser.find_element_by_name('description')
 
-        title.send_keys('test_cocktail')
-        description.send_keys('test_description')
+        title.send_keys('test cocktail')
+        description.send_keys('test description')
 
         title.submit()
 
