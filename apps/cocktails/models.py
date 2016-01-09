@@ -26,7 +26,7 @@ class Cocktail(models.Model):
 
         super(Cocktail, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     @models.permalink

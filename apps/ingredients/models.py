@@ -24,7 +24,7 @@ class Liquid(models.Model):
         self.slug = slugify(self.name)
         super(Liquid, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -76,7 +76,7 @@ class Ingredient(models.Model):
 
         super(Ingredient, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%g %s" % (self.amount, self.get_measurement_display())
 
 

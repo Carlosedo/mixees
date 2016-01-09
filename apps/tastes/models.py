@@ -17,5 +17,5 @@ class Taste(models.Model):
             self.views = 0
         super(Taste, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title

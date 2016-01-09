@@ -13,5 +13,5 @@ class UserProfile(models.Model):
     image = models.ImageField(upload_to='profile_images', blank=True)
     liked_cocktails = models.ManyToManyField(Cocktail, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
