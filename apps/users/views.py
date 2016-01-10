@@ -97,7 +97,7 @@ class LoginView(FormView):
             return HttpResponse("Invalid login details supplied.")
 
     def get_success_url(self):
-        redirect_to = self.request.REQUEST.get('next', '')
+        redirect_to = self.request.GET.get('next', '')
         if redirect_to:
             return redirect_to
         return reverse(self.success_url)

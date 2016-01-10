@@ -3,12 +3,22 @@ import sys
 from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+from apps.users.models import UserProfile
 
-class NewVisitorTest(StaticLiveServerTestCase):
+
+class SeleniumDebugTestCase(StaticLiveServerTestCase):
+    def __init__(self, *args, **kwargs):
+        super(SeleniumDebugTestCase, self).__init__(*args, **kwargs)
+        if settings.DEBUG == False:
+            settings.DEBUG = True
+
+
+class NewVisitorTest(SeleniumDebugTestCase):
     @classmethod
     def setUpClass(cls):
         for arg in sys.argv:
@@ -26,7 +36,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
-        User.objects.create_user('test_username', 'myemail@test.com', 'test_password')
+        user = User.objects.create_user('test_username', 'myemail@test.com', 'test_password')
+        UserProfile.objects.get_or_create(
+            user=user
+        )
 
     def tearDown(self):
         self.browser.quit()
@@ -70,8 +83,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         title = self.browser.find_element_by_name('title')
         description = self.browser.find_element_by_name('description')
 
-        title.send_keys('test cocktail')
-        description.send_keys('test description')
+        title.send_keys('test_cocktail')
+        description.send_keys('test_description')
 
         title.submit()
 
