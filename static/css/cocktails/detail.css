@@ -49,3 +49,12 @@
 .parts-3 {
     height: 90px;
 }
+
+
+.ingredient-name {
+    display: none;
+}
+
+.ingredient-name:hover {
+    display: block;
+}

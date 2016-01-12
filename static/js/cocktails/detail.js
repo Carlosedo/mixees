@@ -1,7 +1,9 @@
 function add_ingredient(total_parts, amount, ingredient) {
     var height = 210 * amount / total_parts;
     $('#drawing').append(
-        '<div class="ingredient ' + ingredient +  '" style="height:' + height + 'px"></div>'
+        '<div class="ingredient ' + ingredient +  '" style="height:' + height + 'px"> \
+            <p class="ingredient-name">' + ingredient + '</p> \
+        </div>'
     )
 }
 
@@ -25,4 +27,15 @@ function draw_cocktail(total_parts, spirits, mixers) {
             )
         }
     }
+}
+
+function bind_events() {
+    $(".ingredient").hover(
+        function() {
+            $(".ingredient-name", this).show();
+        },
+        function () {
+            $(".ingredient-name", this).hide();
+        }
+    );
 }
