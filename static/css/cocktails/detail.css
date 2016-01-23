@@ -5,47 +5,50 @@
     width: 156px;
 }
 
+/* Spirits */
 .vodka {
     background-color: #E5E5E5;
 }
-
 .gin {
     background-color: #81C7F9;
 }
-
 .rum {
     background-color: #450F00;
 }
-
 .whiskey {
     background-color: #CD530D;
 }
+.tequila {
+    background-color: #F3A000;
+}
+.cointreau {
+    background-color: #C26114;
+}
 
+/* Mixers */
 .orange {
     background-color: #F69800;
 }
-
 .coke {
     background-color: #211212;
 }
-
 .tonic {
     background-color: #CBC1AA;
 }
-
 .red-bull {
     background-color: #00009F;
 }
+.sweet-sour {
+    background-color: #EDE564;
+}
 
-
+/* Parts */
 .parts-1 {
     height: 30px;
 }
-
 .parts-2 {
     height: 60px;
 }
-
 .parts-3 {
     height: 90px;
 }
@@ -54,7 +57,6 @@
 .ingredient-name {
     display: none;
 }
-
 .ingredient-name:hover {
     display: block;
 }
