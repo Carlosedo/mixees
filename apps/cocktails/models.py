@@ -12,7 +12,7 @@ class Cocktail(models.Model):
     glass_type = models.CharField(max_length=80, null=True)
     mixing_instructions = models.TextField(default='')
     skill_level = models.CharField(max_length=80, null=True)
-    # tastes = models.ManyToManyField(Taste)
+    tastes = models.ManyToManyField(Taste)
 
     class Meta:
         verbose_name = "Cocktail"

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Add Spirit{% endblock %}
+{% block title %}Add Taste{% endblock %}
 
 {% block content %}
-<h1>Add Spirit</h1>
+<h1>Add Taste</h1>
 
 <form method="POST">{% csrf_token %}
     {{ form|crispy }}
     <button class="btn btn-prymary" type="submit">Save</button>
 </form>
-<a href="{% url 'ingredient_list' %}">Back to ingredient list</a>
+<a href="{% url 'taste_list' %}">Back to taste list</a>
 {% endblock %}

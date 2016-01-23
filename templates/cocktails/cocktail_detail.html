@@ -39,6 +39,15 @@
 	    {% endfor %}
 	</ul>
 
+	{% if object.tastes %}
+		<h2>Tastes</h2>
+		<ul>
+			{% for taste in object.tastes.all %}
+				<li><a href="{% url 'taste_detail' taste.slug %}">{{ taste }}</a></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
 	<h2>Description</h2>
 	<p>{{ object.description|default:"No description" }}</p>
 

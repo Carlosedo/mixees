@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cocktails/', include('apps.cocktails.urls')),
     url(r'^ingredients/', include('apps.ingredients.urls')),
+    url(r'^tastes/', include('apps.tastes.urls')),
     url(r'^users/', include('apps.users.urls')),
 
 )

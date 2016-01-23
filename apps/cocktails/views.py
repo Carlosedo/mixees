@@ -67,7 +67,7 @@ class CocktailDetailView(DetailView):
 
 class CocktailCreateView(LoginRequiredMixin, CreateView):
     model = Cocktail
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'tastes']
 
     def get_success_url(self):
         return reverse(

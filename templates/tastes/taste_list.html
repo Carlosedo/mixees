@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Tastes{% endblock %}
+
+{% block content %}
+  <h1>Tastes</h1>
+
+  {% if taste_list %}
+    <ul>
+      {% for taste in taste_list %}
+        <li><a href="{% url 'taste_detail' taste.slug %}">{{ taste }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no tastes in the database.</p>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+     <a href="{% url 'taste_create' %}" class="btn btn-primary">Add new</a>
+  {% else %}
+    <p><a id="register" href="{% url 'users.register' %}?next={{ request.path }}">Register</a> or <a id="login" href="{% url 'users.login' %}?next={{ request.path }}">Login</a> to add new tastes.</p>
+    {% endif %}
+{% endblock %}

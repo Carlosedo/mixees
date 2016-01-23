@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object }}{% endblock %}
+
+{% block content %}
+  <h1>{{ object }}</h1>
+  {% if cocktail_list %}
+    <ul>
+      {% for cocktail in cocktail_list %}
+        <li><a href="{% url 'cocktail_detail' cocktail.slug %}">{{ cocktail }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no cocktails with this flavour yet</p>
+    {% if user.is_authenticated %}
+      <p><a href="{% url 'cocktail_create' %}">Add</a> a new one!</p>
+    {% endif %}
+  {% endif %}
+  <a href="{% url 'taste_list' %}">Back to taste list</a>
+{% endblock %}

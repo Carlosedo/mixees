@@ -30,12 +30,12 @@ class MixerDetailView(DetailView):
 
 class SpiritCreateView(LoginRequiredMixin, CreateView):
     model = Spirit
-    fields =['name', 'volume']
+    fields = ['name', 'volume']
 
 
 class MixerCreateView(LoginRequiredMixin, CreateView):
     model = Mixer
-    fields =['name']
+    fields = ['name']
 
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
@@ -80,7 +80,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
 class IngredientDeleteView(DeleteView):
     model = Ingredient
-    template_name="ingredients/ingredient_confirm_delete.html"
+    template_name = "ingredients/ingredient_confirm_delete.html"
 
     def get_success_url(self):
         return reverse('cocktail_detail', args=[self.kwargs['slug']])
