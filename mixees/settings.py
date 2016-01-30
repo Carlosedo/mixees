@@ -44,6 +44,9 @@ INSTALLED_APPS = (
     'apps.tastes',
     'crispy_forms',
     'braces',
+    'django_graphiql',
+    # This will also make the `graphql_schema` management command available
+    'graphene.contrib.django',
 )
 
 MIDDLEWARE_CLASSES = (

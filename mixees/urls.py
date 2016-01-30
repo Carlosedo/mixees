@@ -1,6 +1,10 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.views.decorators.csrf import csrf_exempt
+
+from schema import schema
+from graphene.contrib.django.views import GraphQLView
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,6 +17,9 @@ urlpatterns = patterns('',
     url(r'^ingredients/', include('apps.ingredients.urls')),
     url(r'^tastes/', include('apps.tastes.urls')),
     url(r'^users/', include('apps.users.urls')),
+
+    url(r'^graphql', csrf_exempt(GraphQLView.as_view(schema=schema))),
+    url(r'^graphiql', include('django_graphiql.urls')),
 
 )
 
