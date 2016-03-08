@@ -1,3 +1,5 @@
+$ = require('jquery');
+
 function add_ingredient(total_parts, amount, ingredient) {
     var height = 210 * amount / total_parts;
     $('#drawing').append(

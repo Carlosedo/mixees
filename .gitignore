@@ -11,3 +11,5 @@
 .coverage
 
 *.pem
+
+node_modules/*

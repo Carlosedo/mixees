@@ -6,12 +6,14 @@ from django.views.decorators.csrf import csrf_exempt
 from schema import schema
 from graphene.contrib.django.views import GraphQLView
 
+from apps.core.views import VueTemplateView
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'mixees.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'', include('apps.home.urls')),
+    # url(r'', include('apps.home.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cocktails/', include('apps.cocktails.urls')),
     url(r'^ingredients/', include('apps.ingredients.urls')),
@@ -21,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^graphql', csrf_exempt(GraphQLView.as_view(schema=schema))),
     url(r'^graphiql', include('django_graphiql.urls')),
 
+    url(r'^vue', VueTemplateView.as_view()),
 )
 
 if settings.DEBUG:
