@@ -3,10 +3,10 @@
     <a href="home.com" v-on:click.prevent="say('nah')">Go home</a>
     <div class="row">
       <div class="col-xs-3">
-        <template v-for="spirit in spirits">
+        <div class="input-wrapper" v-for="spirit in spirits">
           <input type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
           <label v-bind:for="spirit.node.slug">{{ spirit.node.name }}</label>
-        </template>
+        </div>
       </div>
 
       <div id="glass" class="col-xs-6">
@@ -19,10 +19,10 @@
       </div>
 
       <div class="col-xs-3">
-        <template v-for="mixer in mixers">
+        <div class="input-wrapper" v-for="mixer in mixers">
           <input type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
           <label v-bind:for="mixer.node.slug">{{ mixer.node.name }}</label>
-        </template>
+        </div>
       </div>
     </div>
   </div>

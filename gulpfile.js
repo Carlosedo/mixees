@@ -28,6 +28,8 @@ var imagemin = require('gulp-imagemin');
 // linting
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+// BrowserSync
+var browserSync = require('browser-sync');
 
 // gulp build --production
 var production = !!argv.production;
@@ -191,8 +193,21 @@ var tasks = {
       .pipe(gulp.dest('./static/images/'));
   },
 
-
 };
+
+gulp.task('browser-sync', function() {
+    browserSync({
+        port: process.env.PORT || 8080,
+        proxy: "localhost:8000"
+    });
+});
+
+gulp.task('reload-sass', ['sass'], function(){
+  browserSync.reload();
+});
+gulp.task('reload-vue', ['browserify'], function(){
+  browserSync.reload();
+});
 
 // --------------------------
 // CUSTOMS TASKS
@@ -212,23 +227,18 @@ gulp.task('test', tasks.test);
 // DEV/WATCH TASK
 // --------------------------
 // gulp.task('watch', ['assets', 'templates', 'sass', 'browserify', 'browser-sync'], function() {
-gulp.task('watch', ['assets', 'sass', 'browserify'], function() {
+  gulp.task('watch', ['assets', 'sass', 'browserify', 'browser-sync'], function() {
 
   // --------------------------
   // watch:sass
   // --------------------------
-  // gulp.watch('./static/scss/**/*.scss', ['reload-sass']);
+  gulp.watch('./static/scss/**/*.scss', ['reload-sass']);
 
   // --------------------------
   // watch:js
   // --------------------------
-  // gulp.watch('./static/js/**/*.js', ['lint:js', 'reload-js']);
-    // gulp.watch(STATIC_PATH + 'vue/**/*.js', ['reload-vue']);
-    // gulp.watch(STATIC_PATH + 'vue/**/*.vue', ['reload-vue']);
-
-    // gulp.task('reload-vue', ['browserify'], function(){
-    //   browserSync.reload();
-    // });
+  gulp.watch('./static/vue/**/*.js', ['reload-vue']);
+  gulp.watch('./static/vue/**/*.vue', ['reload-vue']);
 
   gutil.log(gutil.colors.bgGreen('Watching for changes...'));
 });
