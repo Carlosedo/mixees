@@ -70,7 +70,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
+@import 'static/scss/bootstrap-custom';
+
 #glass {
     height: 300px;
     width: 150px;

@@ -90,7 +90,8 @@ var tasks = {
       .pipe(gulpif(!production, sourcemaps.init()))
       .pipe(sass({
         sourceComments: !production,
-        outputStyle: production ? 'compressed' : 'nested'
+        outputStyle: production ? 'compressed' : 'nested',
+        includePaths: ['./node_modules/bootstrap-sass/assets/stylesheets']
       }))
       .on('error', handleError('SASS'))
       // generate .maps
