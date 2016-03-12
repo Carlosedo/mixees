@@ -2,8 +2,8 @@
   <div class="maker container">
     <a href="home.com" v-on:click.prevent="say('nah')">Go home</a>
     <div class="row">
-      <div class="col-xs-3">
-        <div class="input-wrapper" v-for="spirit in spirits">
+      <div class="col-xs-3 ingredient__list">
+        <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
           <input type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
           <label v-bind:for="spirit.node.slug">{{ spirit.node.name }}</label>
         </div>
@@ -18,7 +18,7 @@
         </template>
       </div>
 
-      <div class="col-xs-3">
+      <div class="col-xs-3 ingredient__list">
         <div class="input-wrapper" v-for="mixer in mixers">
           <input type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
           <label v-bind:for="mixer.node.slug">{{ mixer.node.name }}</label>
@@ -64,7 +64,18 @@ export default {
 
     say: function (msg) {
       alert(msg)
-    }
+    },
+
+    add_nearby: function (e) {
+      $(e.target).prev('.input-wrapper').addClass('nearby')
+      $(e.target).next('.input-wrapper').addClass('nearby')
+    },
+
+    remove_nearby: function (e) {
+      $(e.target).prev('.input-wrapper').removeClass('nearby')
+      $(e.target).next('.input-wrapper').removeClass('nearby')
+    },
+
   }
 
 }
@@ -118,5 +129,30 @@ export default {
 }
 .sweet-sour {
     background-color: #EDE564;
+}
+
+.ingredient__list div label {
+  display: block;
+  -webkit-transition: 0.15s linear;
+}
+
+.ingredient__list div:hover {
+  margin-top: 9px; margin-bottom: 9px;
+  z-index: 200;
+}
+
+.ingredient__list div:hover label {
+  -webkit-transform-origin: center bottom;
+  -webkit-transform: scale(1.5);
+}
+
+.ingredient__list div.nearby {
+  margin-top: 6px; margin-bottom: 6px;
+  z-index: 100;
+}
+
+.ingredient__list div.nearby label {
+  -webkit-transform-origin: center bottom;
+  -webkit-transform: scale(1.25);
 }
 </style>
