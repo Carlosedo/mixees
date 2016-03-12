@@ -6,14 +6,6 @@ from django.template.defaultfilters import slugify
 
 from apps.cocktails.models import Cocktail
 
-MEASUREMENT_CHOICES = (
-    (1, "ml"),
-    (2, "oz"),
-    (3, "cup"),
-    (4, "part"),
-    (5, "teaspoon"),
-)
-
 
 class Liquid(models.Model):
     """Base class for Spirit and Mixer"""
@@ -32,7 +24,7 @@ class Liquid(models.Model):
 
 
 class Spirit(Liquid):
-    volume = models.PositiveSmallIntegerField(validators=[MaxValueValidator(100)])
+    volume = models.PositiveSmallIntegerField(null=True, validators=[MaxValueValidator(100)])
 
     class Meta:
         verbose_name = "Spirit"
@@ -61,7 +53,7 @@ class Ingredient(models.Model):
     """Ingredient class is the join for Cocktails and Liquids"""
     cocktail = models.ForeignKey(Cocktail)
     amount = models.DecimalField(decimal_places=2, max_digits=5, null=True)
-    measurement = models.SmallIntegerField(choices=MEASUREMENT_CHOICES)
+    measurement = models.CharField(default='Some', max_length=30)
     spirit = models.ForeignKey(Spirit, blank=True, null=True)
     mixer = models.ForeignKey(Mixer, blank=True, null=True)
 
@@ -70,13 +62,16 @@ class Ingredient(models.Model):
         verbose_name_plural = "Ingredients"
 
     def save(self, *args, **kwargs):
-        if self.measurement == 4:
+        if self.spirit:
             self.cocktail.total_parts += self.amount
             self.cocktail.save()
 
         super(Ingredient, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%g %s" % (self.amount, self.get_measurement_display())
+        if self.amount:
+            return "%g %s" % (self.amount, self.measurement)
+        else:
+            return self.measurement
 
 
