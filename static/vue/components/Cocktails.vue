@@ -2,7 +2,7 @@
   <div class="cocktails">
     <ul>
       <li v-for="cocktail in cocktails">
-        {{ cocktail.node.title }}
+        {{ cocktail._source.title }}
       </li>
     </ul>
   </div>
@@ -10,6 +10,12 @@
 
 <script>
 var $ = require('jquery')
+
+var elasticsearch = require('elasticsearch')
+var es_client = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'trace'
+})
 
 export default {
   data () {
@@ -19,18 +25,19 @@ export default {
   },
 
   created: function () {
-    this.loadData()
+    this.loadESData()
   },
 
   methods: {
-    loadData: function () {
-      $.ajax({
-        url: 'http://localhost:8000/graphql/',
-        type: 'GET',
-        crossDomain: true,
-        data: {query: '{ allCocktails { edges { node { id, title } } } }'}
-      }).done(data => {
-        this.cocktails = data.data.allCocktails.edges
+    loadESData: function () {
+      es_client.search({
+        index: 'cocktails',
+        type: 'cocktail',
+        ignore: [404]
+      }).then( body => {
+        this.cocktails = body.hits.hits
+      }, error => {
+        console.trace(error.message)
       })
     }
   }
