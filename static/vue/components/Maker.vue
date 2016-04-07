@@ -32,6 +32,7 @@
 
 <script>
 var $ = require('jquery')
+var slugify = require('slugify');
 
 export default {
   data () {
@@ -61,7 +62,33 @@ export default {
       }).done(data => {
         this.spirits = data.data.allSpirits.edges
         this.mixers = data.data.allMixers.edges
+
+        this.generateCSS()
       })
+    },
+
+    generateCSS: function() {
+      let css_classes = ''
+
+      for (let spirit of this.spirits) {
+        let name = slugify(spirit.node.name).toLowerCase()
+
+        let hex_values = '0123456789abcdef'
+        let color = '#'
+
+        for (var i = 0; i < 6; i++) {
+          let randomIndex = Math.floor(Math.random() * hex_values.length)
+          color += hex_values[randomIndex]
+        }
+
+        css_classes += '.' + name + '{background-color:' + color + ';} '
+      }
+
+      let style = document.createElement('style')
+      style.type = 'text/css'
+      style.innerHTML = css_classes
+
+      document.getElementsByTagName('head')[0].appendChild(style);
     },
 
     say: function (msg) {
