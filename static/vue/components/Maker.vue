@@ -2,7 +2,7 @@
   <div class="maker container">
     <a href="home.com" v-on:click.prevent="say('nah')">Go home</a>
     <div class="row">
-      <div class="col-xs-3 ingredient__list">
+      <div class="col-xs-3 ingredient__list spirits">
         <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
           <input id="spirit-{{ $index }}" type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
           <label for="spirit-{{ $index }}">{{ spirit.node.name }}</label>
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div class="col-xs-3 ingredient__list">
+      <div class="col-xs-3 ingredient__list mixers">
         <div class="input-wrapper" v-for="mixer in mixers" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
           <input id="mixer-{{ $index }}" type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
           <label for="mixer-{{ $index }}">{{ mixer.node.name }}</label>
@@ -69,13 +69,13 @@ export default {
     },
 
     add_nearby: function (e) {
-      $(e.target).prev('.input-wrapper').addClass('nearby')
-      $(e.target).next('.input-wrapper').addClass('nearby')
+      $(e.currentTarget).prev('.input-wrapper').addClass('nearby')
+      $(e.currentTarget).next('.input-wrapper').addClass('nearby')
     },
 
     remove_nearby: function (e) {
-      $(e.target).prev('.input-wrapper').removeClass('nearby')
-      $(e.target).next('.input-wrapper').removeClass('nearby')
+      $(e.currentTarget).prev('.input-wrapper').removeClass('nearby')
+      $(e.currentTarget).next('.input-wrapper').removeClass('nearby')
     },
 
   }
@@ -91,10 +91,6 @@ export default {
     width: 150px;
     background-color: grey;
     margin: 0 auto;
-}
-
-.input-wrapper {
-  margin: 10px;
 }
 
 input[type="checkbox"] {
@@ -148,26 +144,46 @@ input[type="checkbox"]:checked + label {
 
 .ingredient__list div label {
   display: block;
-  -webkit-transition: 0.15s linear;
 }
 
 .ingredient__list div:hover {
-  margin-top: 9px; margin-bottom: 9px;
+  padding-top: 10px; padding-bottom: 9px;
   z-index: 200;
 }
 
+.ingredient__list div:hover {
+  -webkit-transform-origin: left bottom;
+}
+
+.ingredient__list.spirits div:hover {
+  -webkit-transform: scale(1.5) translate(15px, 0);
+}
+
+.ingredient__list.mixers div:hover {
+  -webkit-transform: scale(1.5) translate(-15px, 0);
+}
+
 .ingredient__list div:hover label {
-  -webkit-transform-origin: center bottom;
-  -webkit-transform: scale(1.5);
+  margin-bottom: 0;
+  color: #aaa;
 }
 
 .ingredient__list div.nearby {
-  margin-top: 6px; margin-bottom: 6px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   z-index: 100;
+  -webkit-transform-origin: left bottom;
+}
+
+.ingredient__list.spirits div.nearby {
+  -webkit-transform: scale(1.25) translate(10px, 0);
+}
+
+.ingredient__list.mixers div.nearby {
+  -webkit-transform: scale(1.25) translate(-10px, 0);
 }
 
 .ingredient__list div.nearby label {
-  -webkit-transform-origin: center bottom;
-  -webkit-transform: scale(1.25);
+  color: #777;
 }
 </style>
