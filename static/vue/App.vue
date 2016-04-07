@@ -35,5 +35,6 @@ body {
 
 .main {
     float: right;
+    width: 100%;
 }
 </style>

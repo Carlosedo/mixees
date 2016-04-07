@@ -4,24 +4,26 @@
     <div class="row">
       <div class="col-xs-3 ingredient__list">
         <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
-          <input type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
-          <label v-bind:for="spirit.node.slug">{{ spirit.node.name }}</label>
+          <input id="spirit-{{ $index }}" type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
+          <label for="spirit-{{ $index }}">{{ spirit.node.name }}</label>
         </div>
       </div>
 
-      <div id="glass" class="col-xs-6">
-        <template v-for="item in selected_spirits">
-          <div class="added {{ item }}"></div>
-        </template>
-        <template v-for="item in selected_mixers">
-          <div class="added {{ item }}"></div>
-        </template>
+      <div class="col-xs-6">
+        <div id="glass">
+          <template v-for="item in selected_spirits">
+            <div class="added {{ item }}"></div>
+          </template>
+          <template v-for="item in selected_mixers">
+            <div class="added {{ item }}"></div>
+          </template>
+        </div>
       </div>
 
       <div class="col-xs-3 ingredient__list">
-        <div class="input-wrapper" v-for="mixer in mixers">
-          <input type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
-          <label v-bind:for="mixer.node.slug">{{ mixer.node.name }}</label>
+        <div class="input-wrapper" v-for="mixer in mixers" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
+          <input id="mixer-{{ $index }}" type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
+          <label for="mixer-{{ $index }}">{{ mixer.node.name }}</label>
         </div>
       </div>
     </div>
@@ -88,6 +90,19 @@ export default {
     height: 300px;
     width: 150px;
     background-color: grey;
+    margin: 0 auto;
+}
+
+.input-wrapper {
+  margin: 10px;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + label {
+  color: blue;
 }
 
 .added {
