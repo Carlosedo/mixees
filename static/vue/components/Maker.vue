@@ -1,6 +1,5 @@
 <template>
   <div class="maker container">
-    <a href="home.com" v-on:click.prevent="say('nah')">Go home</a>
     <div class="row">
       <div class="col-xs-3 ingredient__list spirits">
         <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
@@ -10,13 +9,18 @@
       </div>
 
       <div class="col-xs-6">
-        <div id="glass">
-          <template v-for="item in selected_spirits">
-            <div class="added {{ item }}"></div>
-          </template>
-          <template v-for="item in selected_mixers">
-            <div class="added {{ item }}"></div>
-          </template>
+        <div id="glass-container">
+          <div id="glass">
+            <template v-for="item in selected_spirits">
+              <div class="added {{ item }}">
+                <p>{{ item }}</p>
+              </div>
+            </template>
+            <template v-for="item in selected_mixers">
+              <div class="added {{ item }}"></div>
+            </template>
+            <div id="bottom"></div>
+          </div>
         </div>
       </div>
 
@@ -113,11 +117,8 @@ export default {
 <style lang="sass">
 @import 'static/scss/bootstrap-custom';
 
-#glass {
-    height: 300px;
-    width: 150px;
-    background-color: grey;
-    margin: 0 auto;
+.mixers {
+  text-align: right;
 }
 
 input[type="checkbox"] {
@@ -128,8 +129,38 @@ input[type="checkbox"]:checked + label {
   color: blue;
 }
 
-.added {
+#glass-container {
+  display: table;
+  margin: 0 auto;
+}
+
+#glass {
+  position: relative;
+  display: table-cell;
+  vertical-align: bottom;
+  height: 300px;
+  width: 150px;
+  border-radius: 5px;
+  border: 4px solid #999;
+  border-top: 0px;
+}
+
+#bottom {
   height: 30px;
+  width: 146px;
+  border-radius: 3px;
+  border-top: 4px solid #999;
+  background-color: #eee;
+  margin-top: 1px;
+}
+
+.added {
+  height: 50px;
+  border-radius: 3px;
+  border: 1px solid white;
+  p {
+    text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+  }
 }
 
 /* Spirits */
@@ -174,7 +205,8 @@ input[type="checkbox"]:checked + label {
 }
 
 .ingredient__list div:hover {
-  padding-top: 10px; padding-bottom: 9px;
+  margin-top: 10px;
+  padding-bottom: 9px;
   z-index: 200;
 }
 

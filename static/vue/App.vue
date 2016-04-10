@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div class="nav">
-      <hello></hello>
       <cocktails></cocktails>
     </div>
     <div class="main">
