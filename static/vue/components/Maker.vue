@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-3 ingredient__list spirits">
         <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
-          <input id="spirit-{{ $index }}" type="checkbox" v-bind:value="spirit.node.slug" v-model="selected_spirits">
+          <input id="spirit-{{ $index }}" type="checkbox" value="{{ spirit.node.slug }}" v-model="selected_spirits">
           <label for="spirit-{{ $index }}">{{ spirit.node.name }}</label>
         </div>
       </div>
@@ -12,8 +12,14 @@
         <div id="glass-container">
           <div id="glass">
             <template v-for="item in selected_spirits">
-              <div class="added {{ item }}">
-                <p>{{ item }}</p>
+              <div class="banner added">
+                <div class="fill">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+                      <path class="waveShape {{ item }}" d="M300,300V2.5c0,0-0.6-0.1-1.1-0.1c0,0-25.5-2.3-40.5-2.4c-15,0-40.6,2.4-40.6,2.4
+                  c-12.3,1.1-30.3,1.8-31.9,1.9c-2-0.1-19.7-0.8-32-1.9c0,0-25.8-2.3-40.8-2.4c-15,0-40.8,2.4-40.8,2.4c-12.3,1.1-30.4,1.8-32,1.9
+                  c-2-0.1-20-0.8-32.2-1.9c0,0-3.1-0.3-8.1-0.7V300H300z"/>
+                    </svg>
+                </div>
               </div>
             </template>
             <template v-for="item in selected_mixers">
@@ -26,7 +32,7 @@
 
       <div class="col-xs-3 ingredient__list mixers">
         <div class="input-wrapper" v-for="mixer in mixers" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
-          <input id="mixer-{{ $index }}" type="checkbox" v-bind:value="mixer.node.slug" v-model="selected_mixers">
+          <input id="mixer-{{ $index }}" type="checkbox" value="{{ mixer.node.slug }}" v-model="selected_mixers">
           <label for="mixer-{{ $index }}">{{ mixer.node.name }}</label>
         </div>
       </div>
@@ -35,8 +41,9 @@
 </template>
 
 <script>
-var $ = require('jquery')
-var slugify = require('slugify');
+var $ = require('jquery');
+var slug = require('slug');
+var unslug = require('unslug');
 
 export default {
   data () {
@@ -75,7 +82,7 @@ export default {
       let css_classes = ''
 
       for (let spirit of this.spirits) {
-        let name = slugify(spirit.node.name).toLowerCase()
+        let name = slug(spirit.node.name).toLowerCase()
 
         let hex_values = '0123456789abcdef'
         let color = '#'
@@ -85,7 +92,7 @@ export default {
           color += hex_values[randomIndex]
         }
 
-        css_classes += '.' + name + '{background-color:' + color + ';} '
+        css_classes += '.' + name + '{fill:' + color + ';} '
       }
 
       let style = document.createElement('style')
@@ -245,4 +252,43 @@ input[type="checkbox"]:checked + label {
 .ingredient__list div.nearby label {
   color: #777;
 }
+
+.banner {
+  background: #fff;
+  width: 146px;
+  height: 50px;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+}
+.banner .fill {
+  -webkit-animation-name: fillAction;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: cubic-bezier(.2, .6, .8, .4);
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+}
+.banner .waveShape {
+  -webkit-animation-name: waveAction;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 0.5s;
+}
+@-webkit-keyframes fillAction {
+  0% {
+      -webkit-transform: translate(0, 50px);
+  }
+  100% {
+      -webkit-transform: translate(0, -5px);
+  }
+}
+@-webkit-keyframes waveAction {
+  0% {
+      -webkit-transform: translate(-150px, 0);
+  }
+  100% {
+      -webkit-transform: translate(0, 0);
+  }
+}
+
 </style>
