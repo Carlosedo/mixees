@@ -11,7 +11,7 @@
       <div class="col-xs-6">
         <div id="glass-container">
           <div id="glass">
-            <template v-for="item in selected_spirits">
+            <template v-for="item in reverse(selected_spirits)">
               <div class="banner added">
                 <div class="fill">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
@@ -102,8 +102,16 @@ export default {
       document.getElementsByTagName('head')[0].appendChild(style);
     },
 
-    say: function (msg) {
-      alert(msg)
+    reverse: function (a) {
+      if (a.length > 1) {
+        var temp = [];
+        for (var i = (a.length - 1); i >= 0; i--) {
+            temp.push(a[i]);
+        }
+        return temp;
+      } else {
+        return a;
+      }
     },
 
     add_nearby: function (e) {
