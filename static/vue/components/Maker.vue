@@ -4,7 +4,7 @@
       <div class="col-xs-3 ingredient__list spirits">
         <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
           <input id="spirit-{{ $index }}" type="checkbox" value="{{ spirit.node.slug }}" v-model="selected_spirits">
-          <label for="spirit-{{ $index }}">{{ spirit.node.name }}</label>
+          <label for="spirit-{{ $index }}">{{ spirit.node.name }}  <span>x</span></label>
         </div>
       </div>
 
@@ -14,11 +14,12 @@
             <template v-for="item in reverse(selected_spirits)">
               <div class="banner added">
                 <div class="fill">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
-                      <path class="waveShape {{ item }}" d="M300,300V2.5c0,0-0.6-0.1-1.1-0.1c0,0-25.5-2.3-40.5-2.4c-15,0-40.6,2.4-40.6,2.4
+                  <div class="drink-label">{{ item | unslug }}</div>
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+                    <path class="waveShape {{ item }}" d="M300,300V2.5c0,0-0.6-0.1-1.1-0.1c0,0-25.5-2.3-40.5-2.4c-15,0-40.6,2.4-40.6,2.4
                   c-12.3,1.1-30.3,1.8-31.9,1.9c-2-0.1-19.7-0.8-32-1.9c0,0-25.8-2.3-40.8-2.4c-15,0-40.8,2.4-40.8,2.4c-12.3,1.1-30.4,1.8-32,1.9
                   c-2-0.1-20-0.8-32.2-1.9c0,0-3.1-0.3-8.1-0.7V300H300z"/>
-                    </svg>
+                  </svg>
                 </div>
               </div>
             </template>
@@ -44,6 +45,12 @@
 var $ = require('jquery');
 var slug = require('slug');
 var unslug = require('unslug');
+var elasticsearch = require('elasticsearch')
+
+var es_client = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'trace'
+})
 
 export default {
   data () {
@@ -53,6 +60,11 @@ export default {
       'added': [],
       'selected_spirits': [],
       'selected_mixers': []
+    }
+  },
+
+  watch: {
+    selected_spirits: function(val) {
     }
   },
 
@@ -122,8 +134,13 @@ export default {
     remove_nearby: function (e) {
       $(e.currentTarget).prev('.input-wrapper').removeClass('nearby')
       $(e.currentTarget).next('.input-wrapper').removeClass('nearby')
-    },
+    }
+  },
 
+  filters: {
+    unslug: function(text) {
+      return unslug(text);
+    }
   }
 
 }
@@ -134,14 +151,6 @@ export default {
 
 .mixers {
   text-align: right;
-}
-
-input[type="checkbox"] {
-  display: none;
-}
-
-input[type="checkbox"]:checked + label {
-  color: blue;
 }
 
 #glass-container {
@@ -176,6 +185,14 @@ input[type="checkbox"]:checked + label {
   p {
     text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
   }
+}
+
+.drink-label {
+  position: absolute;
+  top: 20px;
+  text-align: center;
+  width: 100%;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 /* Spirits */
@@ -215,8 +232,27 @@ input[type="checkbox"]:checked + label {
     background-color: #EDE564;
 }
 
+
+/* Ingredient List */
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + label {
+  color: blue;
+  & span {
+    display: inline;
+    color: red;
+  }
+}
+
 .ingredient__list div label {
   display: block;
+  margin-bottom: 7px;
+  & span {
+    display: none;
+  }
 }
 
 .ingredient__list div:hover {
