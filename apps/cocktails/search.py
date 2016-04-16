@@ -16,6 +16,7 @@ class CocktailDocType(DocType):
     title = String()
     glass_type = String()
     skill_level = String()
+    ingredients = String()
 
     class Meta:
         index = 'cocktails'
@@ -44,5 +45,14 @@ class CocktailDocType(DocType):
         cocktail_doc.title = cocktail.title
         cocktail_doc.glass_type = cocktail.glass_type
         cocktail_doc.skill_level = cocktail.skill_level
+
+        ingredient_list = []
+        for ingredient in cocktail.ingredient_set.all():
+            if ingredient.spirit:
+                ingredient_list.append(ingredient.spirit.name)
+            elif ingredient.mixer:
+                ingredient_list.append(ingredient.mixer.name)
+
+        cocktail_doc.ingredients = ingredient_list
 
         cocktail_doc.save()
