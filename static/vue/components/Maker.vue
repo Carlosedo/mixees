@@ -192,7 +192,12 @@ export default {
   top: 20px;
   text-align: center;
   width: 100%;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 5px;
+  color: #fff;
+  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 
 /* Spirits */
