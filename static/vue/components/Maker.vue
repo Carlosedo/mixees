@@ -255,6 +255,9 @@ input[type="checkbox"]:checked + label {
 .ingredient__list div label {
   display: block;
   margin-bottom: 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   & span {
     display: none;
   }
