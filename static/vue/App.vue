@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="nav">
+    <!-- <div class="nav">
       <cocktails></cocktails>
-    </div>
+    </div> -->
     <div class="main">
       <maker></maker>
     </div>

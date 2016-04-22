@@ -1,14 +1,22 @@
 <template>
   <div class="maker container">
     <div class="row">
-      <div class="col-xs-3 ingredient__list spirits">
-        <div class="input-wrapper" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
+      <div class="col-xs-3 ingredient-list spirits">
+        <div class="ingredient-list__title">Select a Spirit</div>
+        <div class="input-wrapper ingredient-list__item" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby" transition="fadeOut">
           <input id="spirit-{{ $index }}" type="checkbox" value="{{ spirit.node.slug }}" v-model="selected_spirits">
-          <label for="spirit-{{ $index }}">{{ spirit.node.name }}  <span>x</span></label>
+          <label for="spirit-{{ $index }}">
+            <span class="label__text">{{ spirit.node.name }}</span>
+             <span class="label__delete">x</span>
+          </label>
         </div>
       </div>
 
       <div class="col-xs-6">
+        <div>Can't find the ingredient you are looking for?</div>
+        <form>
+          <input type="text" placeholder="Type it here!"></input>
+        </form>
         <div id="glass-container">
           <div id="glass">
             <template v-for="item in reverse(selected_spirits)">
@@ -31,8 +39,9 @@
         </div>
       </div>
 
-      <div class="col-xs-3 ingredient__list mixers">
-        <div class="input-wrapper" v-for="mixer in mixers" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
+      <div class="col-xs-3 ingredient-list mixers">
+        <div class="ingredient-list__title">Select a Mixer</div>
+        <div class="input-wrapper ingredient-list__item" v-for="mixer in mixers" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby">
           <input id="mixer-{{ $index }}" type="checkbox" value="{{ mixer.node.slug }}" v-model="selected_mixers">
           <label for="mixer-{{ $index }}">{{ mixer.node.name }}</label>
         </div>
@@ -65,6 +74,26 @@ export default {
 
   watch: {
     selected_spirits: function(val) {
+      // if (val.length >= 5) {
+      //   $('.ingredient-list input').prop( "disabled", true );
+      // }
+
+      es_client.search({
+        index: 'cocktails',
+        type: 'cocktail',
+        body: {
+          query: {
+            match_phrase: {
+              ingredients: val.join(' ')
+            }
+          }
+        },
+        ignore: [404]
+      }).then( body => {
+        debugger
+      }, error => {
+        console.trace(error.message)
+      })
     }
   },
 
@@ -149,10 +178,8 @@ export default {
 <style lang="sass">
 @import 'static/scss/bootstrap-custom';
 
-.mixers {
-  text-align: right;
-}
 
+/* GLASS */
 #glass-container {
   display: table;
   margin: 0 auto;
@@ -179,11 +206,47 @@ export default {
 }
 
 .added {
+  background: #fff;
+  width: 146px;
   height: 50px;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
   border-radius: 3px;
   border: 1px solid white;
   p {
     text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+  }
+  & .fill {
+    -webkit-animation-name: fillAction;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: cubic-bezier(.2, .6, .8, .4);
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+  }
+  & .waveShape {
+    -webkit-animation-name: waveAction;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 0.5s;
+  }
+}
+
+@-webkit-keyframes fillAction {
+  0% {
+      -webkit-transform: translate(0, 50px);
+  }
+  100% {
+      -webkit-transform: translate(0, -5px);
+  }
+}
+
+@-webkit-keyframes waveAction {
+  0% {
+      -webkit-transform: translate(-150px, 0);
+  }
+  100% {
+      -webkit-transform: translate(0, 0);
   }
 }
 
@@ -200,7 +263,83 @@ export default {
   text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 
-/* Spirits */
+
+/* INGREDIENT LIST */
+.mixers {
+  text-align: right;
+}
+
+.ingredient-list__item input[type="checkbox"] {
+  display: none;
+}
+
+.ingredient-list__item input[type="checkbox"]:checked + label {
+  & .label__text {
+    background-color: #08FE66;
+  }
+  & .label__delete {
+    display: inline;
+    color: red;
+  }
+}
+
+.ingredient-list label {
+  display: block;
+  margin-bottom: 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  & .label__text {
+    padding: 0 3px;
+  }
+  & .label__delete {
+    display: none;
+  }
+}
+
+.ingredient-list .input-wrapper:hover {
+  margin-top: 10px;
+  padding-bottom: 9px;
+  z-index: 200;
+  -webkit-transform-origin: left bottom;
+
+  & label {
+    margin-bottom: 0;
+    color: #aaa;
+  }
+}
+
+.ingredient-list div.nearby {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  z-index: 100;
+  -webkit-transform-origin: left bottom;
+  & label {
+    color: #777;
+  }
+}
+
+.ingredient-list.spirits {
+  & div.nearby {
+    -webkit-transform: scale(1.25) translate(10px, 0);
+  }
+  & .input-wrapper:hover {
+    -webkit-transform: scale(1.5) translate(15px, 0);
+  }
+}
+
+.ingredient-list.mixers {
+  & div.nearby {
+    -webkit-transform: scale(1.25) translate(-95px, 0);
+  }
+  & .input-wrapper:hover {
+    -webkit-transform: scale(1.5) translate(-100px, 0);
+  }
+}
+
+
+/* INGREDIENT COLORS */
+// Spirits
 .vodka {
     background-color: #E5E5E5;
 }
@@ -220,7 +359,7 @@ export default {
     background-color: #C26114;
 }
 
-/* Mixers */
+// Mixers
 .orange {
     background-color: #F69800;
 }
@@ -235,112 +374,6 @@ export default {
 }
 .sweet-sour {
     background-color: #EDE564;
-}
-
-
-/* Ingredient List */
-
-input[type="checkbox"] {
-  display: none;
-}
-
-input[type="checkbox"]:checked + label {
-  color: blue;
-  & span {
-    display: inline;
-    color: red;
-  }
-}
-
-.ingredient__list div label {
-  display: block;
-  margin-bottom: 7px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  & span {
-    display: none;
-  }
-}
-
-.ingredient__list div:hover {
-  margin-top: 10px;
-  padding-bottom: 9px;
-  z-index: 200;
-}
-
-.ingredient__list div:hover {
-  -webkit-transform-origin: left bottom;
-}
-
-.ingredient__list.spirits div:hover {
-  -webkit-transform: scale(1.5) translate(15px, 0);
-}
-
-.ingredient__list.mixers div:hover {
-  -webkit-transform: scale(1.5) translate(-15px, 0);
-}
-
-.ingredient__list div:hover label {
-  margin-bottom: 0;
-  color: #aaa;
-}
-
-.ingredient__list div.nearby {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  z-index: 100;
-  -webkit-transform-origin: left bottom;
-}
-
-.ingredient__list.spirits div.nearby {
-  -webkit-transform: scale(1.25) translate(10px, 0);
-}
-
-.ingredient__list.mixers div.nearby {
-  -webkit-transform: scale(1.25) translate(-10px, 0);
-}
-
-.ingredient__list div.nearby label {
-  color: #777;
-}
-
-.banner {
-  background: #fff;
-  width: 146px;
-  height: 50px;
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
-}
-.banner .fill {
-  -webkit-animation-name: fillAction;
-  -webkit-animation-iteration-count: 1;
-  -webkit-animation-timing-function: cubic-bezier(.2, .6, .8, .4);
-  -webkit-animation-duration: 1s;
-  -webkit-animation-fill-mode: forwards;
-}
-.banner .waveShape {
-  -webkit-animation-name: waveAction;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation-duration: 0.5s;
-}
-@-webkit-keyframes fillAction {
-  0% {
-      -webkit-transform: translate(0, 50px);
-  }
-  100% {
-      -webkit-transform: translate(0, -5px);
-  }
-}
-@-webkit-keyframes waveAction {
-  0% {
-      -webkit-transform: translate(-150px, 0);
-  }
-  100% {
-      -webkit-transform: translate(0, 0);
-  }
 }
 
 </style>
