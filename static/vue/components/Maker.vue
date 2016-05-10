@@ -5,9 +5,9 @@
         <div class="ingredient-list__title">Select a Spirit</div>
         <div class="input-wrapper ingredient-list__item" v-for="spirit in spirits" v-on:mouseover="add_nearby" v-on:mouseout="remove_nearby" transition="fadeOut">
           <input id="spirit-{{ $index }}" type="checkbox" value="{{ spirit.node.slug }}" v-model="selected_spirits">
-          <label for="spirit-{{ $index }}">
+          <label for="spirit-{{ $index }}" class="cursor-pointer">
             <span class="label__text">{{ spirit.node.name }}</span>
-             <span class="label__delete">x</span>
+             <span class="label__delete cursor-pointer">x</span>
           </label>
         </div>
       </div>
@@ -74,9 +74,14 @@ export default {
 
   watch: {
     selected_spirits: function(val) {
-      // if (val.length >= 5) {
-      //   $('.ingredient-list input').prop( "disabled", true );
-      // }
+      if (val.length > 5) {
+        $('.ingredient-list.spirits label').removeClass("cursor-pointer");
+        val.pop()
+      } else if (val.length == 5) {
+        $('.ingredient-list.spirits label').removeClass("cursor-pointer");
+      } else {
+        $('.ingredient-list.spirits label').addClass("cursor-pointer");
+      }
 
       es_client.search({
         index: 'cocktails',
@@ -176,7 +181,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import 'static/scss/bootstrap-custom';
+@import 'static/scss/maker';
 
 
 /* GLASS */
@@ -305,7 +310,7 @@ export default {
 
   & label {
     margin-bottom: 0;
-    color: #aaa;
+    color: $emperor;
   }
 }
 
@@ -315,7 +320,7 @@ export default {
   z-index: 100;
   -webkit-transform-origin: left bottom;
   & label {
-    color: #777;
+    color: $tundora;
   }
 }
 
