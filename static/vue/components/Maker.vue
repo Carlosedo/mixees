@@ -47,6 +47,17 @@
         </div>
       </div>
     </div>
+    <div class="row row-centered">
+      <div class="col-xs-3 col-centered">
+        <div v-if="selected_spirits.length == 0 && selected_mixers.length == 0 && num_found_cocktails == 0">
+          <p>Come on! Ad some ingredients to start searching for cocktails!</p>
+        </div>
+        <div v-else>
+          <p v-if="num_found_cocktails == 0">Oops! We couldn't find any cocktail with those ingredients</p>
+          <p v-else class="cocktail-list__button">Click here to see {{ num_found_cocktails }} cocktails!</p>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <a v-for="cocktail in found_cocktails" href="cocktails/{{ cocktail._source.title | slug }}">
         <div class="col-xs-3" style="background-color:grey;">
@@ -77,7 +88,8 @@ export default {
       'added': [],
       'selected_spirits': [],
       'selected_mixers': [],
-      'found_cocktails': []
+      'found_cocktails': [],
+      'num_found_cocktails': 0
     }
   },
 
@@ -105,6 +117,7 @@ export default {
         ignore: [404]
       }).then( body => {
         this.found_cocktails = body.hits.hits
+        this.num_found_cocktails = this.found_cocktails.length
       }, error => {
         console.trace(error.message)
       })
