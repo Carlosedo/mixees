@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from graphene import relay, ObjectType, resolve_only_args
 from graphene.contrib.django.filter.fields import DjangoFilterConnectionField
 from graphene.contrib.django.types import DjangoNode
@@ -33,11 +35,13 @@ class Query(ObjectType):
 
     @resolve_only_args
     def resolve_all_spirits(self, **kwargs):
-        return Spirit.objects.all()
+        return Spirit.objects.annotate(num_uses=Count('ingredient')) \
+                     .order_by('-num_uses')[:20]
 
     @resolve_only_args
     def resolve_all_mixers(self, **kwargs):
-        return Mixer.objects.all()
+        return Mixer.objects.annotate(num_uses=Count('ingredient')) \
+                    .order_by('-num_uses')[:20]
 
     class Meta:
         abstract = True
