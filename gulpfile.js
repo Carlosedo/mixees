@@ -202,7 +202,7 @@ gulp.task('browser-sync', function() {
     });
 });
 
-gulp.task('reload-sass', ['sass'], function(){
+gulp.task('reload-sass', ['sass', 'browserify'], function(){
   browserSync.reload();
 });
 gulp.task('reload-vue', ['browserify'], function(){
