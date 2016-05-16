@@ -47,6 +47,14 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <a v-for="cocktail in found_cocktails" href="cocktails/{{ cocktail._source.title | slug }}">
+        <div class="col-xs-3" style="background-color:grey;">
+          <p>{{ cocktail._source.title }}</p>
+          <img src="http://icons.iconarchive.com/icons/flameia/fruity-hearts/128/cocktail-icon.png" alt="cocktail">
+        </div>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -68,7 +76,8 @@ export default {
       'mixers': [],
       'added': [],
       'selected_spirits': [],
-      'selected_mixers': []
+      'selected_mixers': [],
+      'found_cocktails': []
     }
   },
 
@@ -95,7 +104,7 @@ export default {
         },
         ignore: [404]
       }).then( body => {
-        debugger
+        this.found_cocktails = body.hits.hits
       }, error => {
         console.trace(error.message)
       })
@@ -172,6 +181,10 @@ export default {
   },
 
   filters: {
+    slug: function(text) {
+      return slug(text.toLowerCase());
+    },
+
     unslug: function(text) {
       return unslug(text);
     }

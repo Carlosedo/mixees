@@ -36,12 +36,12 @@ class Query(ObjectType):
     @resolve_only_args
     def resolve_all_spirits(self, **kwargs):
         return Spirit.objects.annotate(num_uses=Count('ingredient')) \
-                     .order_by('-num_uses')[:20]
+                     .order_by('-num_uses')[:15]
 
     @resolve_only_args
     def resolve_all_mixers(self, **kwargs):
         return Mixer.objects.annotate(num_uses=Count('ingredient')) \
-                    .order_by('-num_uses')[:20]
+                    .order_by('-num_uses')[:15]
 
     class Meta:
         abstract = True
