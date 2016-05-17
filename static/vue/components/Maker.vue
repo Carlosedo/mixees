@@ -1,5 +1,5 @@
 <template>
-  <div class="maker container">
+  <div id="maker" class="container">
     <div class="row">
       <div class="col-xs-3 ingredient-list spirits">
         <div class="ingredient-list__title">Select a Spirit</div>
@@ -13,10 +13,11 @@
       </div>
 
       <div class="col-xs-6">
-        <div>Can't find the ingredient you are looking for?</div>
-        <form>
-          <input type="text" placeholder="Type it here!"></input>
-        </form>
+        <div class="ingredient-search">
+          <form>
+            <input type="text" placeholder="Search for ingredients!"></input>
+          </form>
+        </div>
         <div id="glass-container">
           <div id="glass">
             <template v-for="item in reverse(selected_spirits)">
@@ -48,16 +49,18 @@
       </div>
     </div>
     <div class="row row-centered">
-      <div class="col-xs-3 col-centered">
+      <div class="col-xs-3 col-centered cocktail-list__button">
         <div v-if="selected_spirits.length == 0 && selected_mixers.length == 0 && num_found_cocktails == 0">
           <p>Come on! Ad some ingredients to start searching for cocktails!</p>
         </div>
         <div v-else>
           <p v-if="num_found_cocktails == 0">Oops! We couldn't find any cocktail with those ingredients</p>
-          <p v-else class="cocktail-list__button">Click here to see {{ num_found_cocktails }} cocktails!</p>
+          <button v-else v-on:click="goToCoktails" class="cocktail-list__button">Click here to see {{ num_found_cocktails }} cocktails!</button>
         </div>
       </div>
     </div>
+  </div>
+  <div id="cocktail-list" class="container">
     <div class="row">
       <a v-for="cocktail in found_cocktails" href="cocktails/{{ cocktail._source.title | slug }}">
         <div class="col-xs-3" style="background-color:grey;">
@@ -146,6 +149,25 @@ export default {
       })
     },
 
+    searchIngredient: function(text) {
+      es_client.search({
+        index: 'ingredients',
+        type: 'ingredient',
+        body: {
+          query: {
+            match: {
+              name: text
+            }
+          }
+        },
+        ignore: [404]
+      }).then( body => {
+        debugger
+      }, error => {
+        console.trace(error.message)
+      })
+    },
+
     generateCSS: function() {
       let css_classes = ''
 
@@ -168,6 +190,13 @@ export default {
       style.innerHTML = css_classes
 
       document.getElementsByTagName('head')[0].appendChild(style);
+    },
+
+    goToCoktails: function (event) {
+      $('html,body').animate(
+        {scrollTop: $("#cocktail-list").offset().top},
+        'slow'
+      );
     },
 
     reverse: function (a) {
@@ -209,6 +238,14 @@ export default {
 <style lang="sass">
 @import 'static/scss/maker';
 
+/* MAIN LAYOUT */
+#maker {
+  min-height: 100vh;
+}
+
+#cocktail-list {
+  min-height: 100vh;
+}
 
 /* GLASS */
 #glass-container {
@@ -296,6 +333,11 @@ export default {
 
 
 /* INGREDIENT LIST */
+.ingredient-search {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .mixers {
   text-align: right;
 }
@@ -312,6 +354,10 @@ export default {
     display: inline;
     color: red;
   }
+}
+
+.ingredient-list {
+  height: 410px;
 }
 
 .ingredient-list label {
@@ -368,6 +414,9 @@ export default {
   }
 }
 
+.cocktail-list__button {
+  text-align: center;
+}
 
 /* INGREDIENT COLORS */
 // Spirits
