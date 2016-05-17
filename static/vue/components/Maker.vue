@@ -55,12 +55,15 @@
         </div>
         <div v-else>
           <p v-if="num_found_cocktails == 0">Oops! We couldn't find any cocktail with those ingredients</p>
-          <button v-else v-on:click="goToCoktails" class="cocktail-list__button">Click here to see {{ num_found_cocktails }} cocktails!</button>
+          <button v-else v-on:click="scrollTo('cocktail-list')" class="cocktail-list__button">Click here to see {{ num_found_cocktails }} cocktails!</button>
         </div>
       </div>
     </div>
   </div>
   <div id="cocktail-list" class="container">
+    <div class="row row-centered">
+      <button v-else v-on:click="scrollTo('top')" class="cocktail-list__button">Back to Cocktail Maker</button>
+    </div>
     <div class="row">
       <a v-for="cocktail in found_cocktails" href="cocktails/{{ cocktail._source.title | slug }}">
         <div class="col-xs-3" style="background-color:grey;">
@@ -192,9 +195,15 @@ export default {
       document.getElementsByTagName('head')[0].appendChild(style);
     },
 
-    goToCoktails: function (event) {
+    scrollTo: function (id) {
+      if (id == 'top') {
+        var offset = 0
+      } else {
+        var offset = $(`#${id}`).offset().top
+      }
+
       $('html,body').animate(
-        {scrollTop: $("#cocktail-list").offset().top},
+        {scrollTop: offset},
         'slow'
       );
     },
