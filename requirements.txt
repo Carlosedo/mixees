@@ -16,7 +16,7 @@ graphql-relay==0.3.3
 gunicorn==19.4.5
 ipdb==0.8.1
 ipython==3.1.0
-Pillow==2.8.1
+Pillow==8.2.0
 python-dateutil==2.5.0
 selenium==2.47.1
 simplejson==3.8.1
